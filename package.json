@@ -1,0 +1,19 @@
+{
+    "name": "dream-voyager-root",
+    "version": "1.0.0",
+    "description": "Root package for Dream Voyager project",
+    "private": true,
+    "scripts": {
+        "install:all": "npm install && cd client && npm install && cd ../server && npm install",
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
+        "client": "npm run dev --prefix client",
+        "server": "npm run dev --prefix server",
+        "build": "npm run build --prefix client"
+    },
+    "dependencies": {
+        "concurrently": "^9.1.0"
+    },
+    "devDependencies": {
+        "typescript": "^5.7.2"
+    }
+}
