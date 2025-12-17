@@ -1,16 +1,32 @@
 import axios from 'axios';
 
-// Get API URL from environment variable
-const apiUrl = import.meta.env.VITE_API_URL;
+// Get API URL with production fallback
+const getApiUrl = () => {
+    // Try environment variable first
+    const envUrl = import.meta.env.VITE_API_URL;
 
-// Validate API URL is set
-if (!apiUrl) {
-    console.error('VITE_API_URL is not set. Please check your environment variables.');
-}
+    // If environment variable exists, use it
+    if (envUrl) {
+        console.log('Using API URL from environment:', envUrl);
+        return envUrl;
+    }
+
+    // Production fallback - hardcoded for reliability
+    if (import.meta.env.PROD) {
+        console.log('Production mode: Using hardcoded API URL');
+        return 'https://dream-voyager-api.onrender.com/api';
+    }
+
+    // Development fallback
+    console.log('Development mode: Using localhost');
+    return 'http://localhost:5000/api';
+};
+
+const apiUrl = getApiUrl();
 
 // Create api instance
 const api = axios.create({
-    baseURL: apiUrl || 'http://localhost:5000/api', // Fallback for development only
+    baseURL: apiUrl,
     headers: {
         'Content-Type': 'application/json'
     }
