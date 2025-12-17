@@ -1,8 +1,16 @@
 import axios from 'axios';
 
+// Get API URL from environment variable
+const apiUrl = import.meta.env.VITE_API_URL;
+
+// Validate API URL is set
+if (!apiUrl) {
+    console.error('VITE_API_URL is not set. Please check your environment variables.');
+}
+
 // Create api instance
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api', // Env variable or default
+    baseURL: apiUrl || 'http://localhost:5000/api', // Fallback for development only
     headers: {
         'Content-Type': 'application/json'
     }
