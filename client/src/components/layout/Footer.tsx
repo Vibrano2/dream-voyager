@@ -149,7 +149,7 @@ const Footer = () => {
                 <div className="container mx-auto px-4 py-6">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                         <p className="text-gray-400 text-sm">
-                            © {new Date().getFullYear()} Dream Voyager. All rights reserved.
+                            © {new Date().getFullYear()} Dream Voyager. All rights reserved. <span className="opacity-50 ml-2 text-xs">v1.1 (Prod)</span>
                         </p>
                         <div className="flex gap-6">
                             <Link to="/privacy" className="text-gray-400 hover:text-brand-skyblue transition-colors text-sm">
