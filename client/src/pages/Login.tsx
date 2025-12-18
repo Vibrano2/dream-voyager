@@ -16,7 +16,7 @@ const Login = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         // DEBUG: Temporary alert to confirm interaction
-        // alert('Attempting login...'); 
+        alert('DEBUG: Form Submitted (Logic Started)...');
         setError('');
         setLoading(true);
 
@@ -133,6 +133,7 @@ const Login = () => {
                         <div>
                             <button
                                 type="submit"
+                                onClick={() => alert('DEBUG: Button physical click detected!')}
                                 disabled={loading}
                                 className={`w-full flex justify-center py-2.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white transition-all duration-200
                                 ${loading
