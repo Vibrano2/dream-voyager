@@ -10,9 +10,9 @@ const Footer = () => {
                     {/* Company Info */}
                     <div>
                         <img
-                            src="/logo.jpg"
+                            src="/logo.png"
                             alt="Dream Voyager"
-                            className="h-12 w-auto mb-4 brightness-0 invert"
+                            className="h-12 w-auto mb-4"
                         />
                         <p className="text-gray-300 text-sm mb-4">
                             Your trusted partner for unforgettable travel experiences.

@@ -11,48 +11,47 @@ const categories = [
 ];
 
 const slides = [
-    {
-        id: 1,
-        title: "Experience the Magic of Bali",
-        subtitle: "7 Days All-Inclusive Package",
-        bg: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&q=80&w=1920",
-        price: "$1,200"
+    id: 1,
+    title: "Experience the Magic of Travel",
+    subtitle: "Premium Luxury Journeys",
+    bg: "/hero-cinematic.png",
+    price: "Custom"
     },
-    {
-        id: 2,
+{
+    id: 2,
         title: "Dubai Luxury Escape",
-        subtitle: "Stay at Atlantis The Royal",
-        bg: "https://images.unsplash.com/photo-1512453979798-5ea936a7fe48?auto=format&fit=crop&q=80&w=1920",
-        price: "$2,500"
-    },
-    {
-        id: 3,
+            subtitle: "Stay at Atlantis The Royal",
+                bg: "https://images.unsplash.com/photo-1512453979798-5ea936a7fe48?auto=format&fit=crop&q=80&w=1920",
+                    price: "$2,500"
+},
+{
+    id: 3,
         title: "Parisian Romantic Getaway",
-        subtitle: "Flight + 5 Star Hotel",
-        bg: "https://images.unsplash.com/photo-1499856871940-062746071749?auto=format&fit=crop&q=80&w=1920",
-        price: "$1,800"
-    },
-    {
-        id: 4,
+            subtitle: "Flight + 5 Star Hotel",
+                bg: "https://images.unsplash.com/photo-1499856871940-062746071749?auto=format&fit=crop&q=80&w=1920",
+                    price: "$1,800"
+},
+{
+    id: 4,
         title: "Maldives Paradise",
-        subtitle: "Overwater Villa Experience",
-        bg: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1920",
-        price: "$3,200"
-    },
-    {
-        id: 5,
+            subtitle: "Overwater Villa Experience",
+                bg: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=1920",
+                    price: "$3,200"
+},
+{
+    id: 5,
         title: "Tokyo Neon Nights",
-        subtitle: "City & Culture Tour",
-        bg: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&q=80&w=1920",
-        price: "$2,100"
-    },
-    {
-        id: 6,
+            subtitle: "City & Culture Tour",
+                bg: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&q=80&w=1920",
+                    price: "$2,100"
+},
+{
+    id: 6,
         title: "Santorini Sunset",
-        subtitle: "Greek Island Hopping",
-        bg: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&q=80&w=1920",
-        price: "$1,950"
-    }
+            subtitle: "Greek Island Hopping",
+                bg: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&q=80&w=1920",
+                    price: "$1,950"
+}
 ];
 
 const quickDeals = [
