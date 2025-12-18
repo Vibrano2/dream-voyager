@@ -22,7 +22,7 @@ const slides = [
         id: 2,
         title: "Dubai Luxury Escape",
         subtitle: "Stay at Atlantis The Royal",
-        bg: "https://images.unsplash.com/photo-1518684079851-30d1b985a59b?auto=format&fit=crop&q=80&w=1920",
+        bg: "https://images.unsplash.com/photo-1546412414-e1885259563a?auto=format&fit=crop&q=80&w=1920",
         price: "$2,500"
     },
     {
