@@ -109,7 +109,7 @@ const TopBar = () => {
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-2 group">
                         <img
-                            src="/logo.jpg"
+                            src="/logo.png"
                             alt="Dream Voyager"
                             className="h-12 w-auto object-contain"
                         />

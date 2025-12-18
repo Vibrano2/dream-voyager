@@ -47,9 +47,15 @@ const AdminLayout = () => {
             {/* Sidebar */}
             <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col">
                 <div className="p-6 border-b border-slate-800">
-                    <div className="flex items-center gap-3">
-                        <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded bg-white object-contain" />
-                        <span className="font-bold text-white text-lg">DreamAdmin</span>
+                    <div className="flex items-center gap-2 mb-8 px-2">
+                        <img
+                            src="/logo.png"
+                            alt="Dream Voyager"
+                            className="h-8 w-auto"
+                        />
+                        <span className="font-heading font-bold text-lg text-slate-800">
+                            Dream Admin
+                        </span>
                     </div>
                 </div>
 

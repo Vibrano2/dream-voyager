@@ -5,9 +5,7 @@ const router = express.Router();
 
 // Initialize OpenAI
 // Note: In production, ensure OPENAI_API_KEY is in your .env file
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY || '',
-});
+// OpenAI initialization moved to request handler to support late-binding .env check
 
 // System prompt to give the AI context about Dream Voyager
 const SYSTEM_PROMPT = `
@@ -37,14 +35,21 @@ router.post('/', async (req: Request, res: Response) => {
             return res.status(400).json({ error: 'Message is required' });
         }
 
+        // Get API key at runtime to ensure all .env files are loaded
+        const apiKey = process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_KEY || '';
+
         // Check if API key is configured
-        if (!process.env.OPENAI_API_KEY) {
-            console.warn('OpenAI API Key not configured');
+        if (!apiKey) {
+            console.warn('OpenAI API Key not configured at request time');
             // Mock response for dev/demo if key is missing
             return res.json({
                 response: "I'm currently in demo mode as my AI brain hasn't been fully connected yet! Please contact support for immediate assistance."
             });
         }
+
+        const openai = new OpenAI({
+            apiKey: apiKey,
+        });
 
         // Construct messages array for OpenAI
         const messages: any[] = [
@@ -59,7 +64,7 @@ router.post('/', async (req: Request, res: Response) => {
 
         const completion = await openai.chat.completions.create({
             messages: messages,
-            model: "gpt-3.5-turbo", // or gpt-4
+            model: "gpt-3.5-turbo",
         });
 
         const text = completion.choices[0].message.content;

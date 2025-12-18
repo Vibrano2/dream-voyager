@@ -32,9 +32,11 @@ const ChatWidget = () => {
         setLoading(true);
 
         try {
+            console.log('Sending chat request to:', '/chat');
             const response = await api.post('/chat', {
                 message: userMsg.text
             });
+            console.log('Chat Response:', response.data);
 
             const botMsg: Message = {
                 id: Date.now() + 1,

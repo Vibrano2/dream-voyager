@@ -12,7 +12,11 @@ import { deliveriesRouter } from './routes/deliveries.js';
 import { adminRouter } from './routes/admin.js';
 import { requireAuth, requireRole } from './middleware/auth.js';
 
+import path from 'path';
+
 dotenv.config();
+// Also try to load from client/.env in case the user put the key there
+dotenv.config({ path: path.join(process.cwd(), '../client/.env') });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
