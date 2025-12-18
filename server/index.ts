@@ -74,4 +74,5 @@ app.get('/api/admin-dashboard', requireAuth, requireRole(['admin']), (req: Reque
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    console.log('Server updated: CORS Config v1.2');
 });
