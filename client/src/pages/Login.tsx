@@ -15,10 +15,13 @@ const Login = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        // DEBUG: Temporary alert to confirm interaction
+        // alert('Attempting login...'); 
         setError('');
         setLoading(true);
 
         try {
+            console.log('Sending login request to:', api.getUri());
             const response = await api.post('/auth/login', { email, password });
             const { session, user } = response.data;
 
@@ -26,7 +29,10 @@ const Login = () => {
             navigate('/dashboard');
         } catch (err: any) {
             console.error('Login error:', err);
-            setError(err.response?.data?.error || 'Failed to login. Please check your credentials.');
+            const errorMsg = err.response?.data?.error || err.message || 'Failed to login.';
+            setError(errorMsg);
+            // DEBUG: Show actual error on mobile
+            alert(`Login Failed: ${errorMsg}\nURL: ${api.defaults.baseURL}`);
         } finally {
             setLoading(false);
         }
