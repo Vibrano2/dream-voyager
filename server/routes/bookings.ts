@@ -174,7 +174,9 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
                     currency: 'NGN',
                     status: 'PENDING',
                     passenger_details: passenger_details || [],
-                    special_requests: special_requests || null
+                    special_requests: special_requests || null,
+                    contact_email,
+                    contact_phone
                 }
             ])
             .select(`

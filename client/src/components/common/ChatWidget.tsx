@@ -45,11 +45,22 @@ const ChatWidget = () => {
             };
             setMessages(prev => [...prev, botMsg]);
 
-        } catch (error) {
+        } catch (error: any) {
             console.error('Chat Error:', error);
+            let errorMessage = "I'm having trouble connecting right now. Please try again later.";
+
+            // Debugging: Show detailed error
+            if (error.response) {
+                errorMessage = `Server Error (${error.response.status}): ${error.response.data?.error || error.message}`;
+            } else if (error.request) {
+                errorMessage = "Network Error: Cannot reach the server. Please check your connection.";
+            } else {
+                errorMessage = `Error: ${error.message}`;
+            }
+
             const errorMsg: Message = {
                 id: Date.now() + 1,
-                text: "I'm having trouble connecting right now. Please try again later.",
+                text: errorMessage,
                 sender: 'bot' as const
             };
             setMessages(prev => [...prev, errorMsg]);
