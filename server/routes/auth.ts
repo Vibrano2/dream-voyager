@@ -62,7 +62,7 @@ router.post('/signup', async (req: Request, res: Response) => {
                 id: authData.user.id,
                 email: authData.user.email,
                 role: role,
-                fullName
+                full_name: fullName
             },
             session: authData.session
         });
@@ -107,8 +107,9 @@ router.post('/login', async (req: Request, res: Response) => {
         res.json({
             message: 'Login successful',
             user: {
-                ...data.user,
-                profile: profile || {}
+                id: data.user.id,
+                email: data.user.email,
+                ...(profile || {})
             },
             session: data.session
         });

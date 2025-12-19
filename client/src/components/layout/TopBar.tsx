@@ -2,13 +2,16 @@ import { useState } from 'react';
 import { Phone, Mail, User, Menu, X, LogOut, ChevronDown, Globe } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 const TopBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [currency, setCurrency] = useState('NGN');
-    const [language, setLanguage] = useState('EN');
+    const { language, setLanguage, t } = useLanguage();
     const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
     const [isLangOpen, setIsLangOpen] = useState(false);
+
+    console.log('TopBar: rendering with language:', language);
 
     const { user, logout, isAuthenticated } = useAuth();
     const navigate = useNavigate();
@@ -87,7 +90,7 @@ const TopBar = () => {
                                     {languages.map(l => (
                                         <button
                                             key={l.code}
-                                            onClick={() => { setLanguage(l.code); setIsLangOpen(false); }}
+                                            onClick={() => { setLanguage(l.code as any); setIsLangOpen(false); }}
                                             className={`block w-full text-left px-3 py-1.5 hover:bg-slate-50 text-xs ${language === l.code ? 'font-bold text-[#F49129]' : ''}`}
                                         >
                                             {l.label}
@@ -98,7 +101,7 @@ const TopBar = () => {
                         </div>
 
                         <span className="text-slate-600">|</span>
-                        <Link to="/login" className="hover:text-white transition-colors">Agent Login</Link>
+                        <Link to="/login" className="hover:text-white transition-colors">{t('nav.agentLogin')}</Link>
                     </div>
                 </div>
             </div>
@@ -118,12 +121,12 @@ const TopBar = () => {
                     {/* Desktop Nav */}
                     <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
                         {[
-                            { label: 'Flights', path: '/flights' },
-                            { label: 'Visas', path: '/visa' },
-                            { label: 'Study Visa', path: '/study-visa' },
-                            { label: 'Hotels', path: '/hotels' },
-                            { label: 'Packages', path: '/packages' },
-                            { label: 'About', path: '/about' }
+                            { label: t('nav.flights'), path: '/flights' },
+                            { label: t('nav.visas'), path: '/visa' },
+                            { label: t('nav.studyVisa'), path: '/study-visa' },
+                            { label: t('nav.hotels'), path: '/hotels' },
+                            { label: t('nav.packages'), path: '/packages' },
+                            { label: t('nav.about'), path: '/about' }
                         ].map((item) => (
                             <Link
                                 key={item.label}
@@ -141,7 +144,7 @@ const TopBar = () => {
                         {isAuthenticated ? (
                             <div className="flex items-center gap-4">
                                 <Link to="/my-bookings" className="text-sm font-medium text-slate-700 hover:text-blue-600 transition-colors">
-                                    My Bookings
+                                    {t('nav.myBookings')}
                                 </Link>
                                 <Link to="/dashboard" className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-brand-skyblue">
                                     <div className="w-8 h-8 rounded-full bg-brand-pale-aqua flex items-center justify-center text-brand-skyblue font-bold border border-brand-skyblue">
@@ -161,10 +164,10 @@ const TopBar = () => {
                             <>
                                 <Link to="/login" className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-slate-900">
                                     <User size={18} />
-                                    <span>Sign In</span>
+                                    <span>{t('nav.signIn')}</span>
                                 </Link>
                                 <Link to="/signup" className="btn-accent text-sm">
-                                    Get Started
+                                    {t('nav.getStarted')}
                                 </Link>
                             </>
                         )}
@@ -181,12 +184,12 @@ const TopBar = () => {
             {isMenuOpen && (
                 <div className="lg:hidden absolute top-full left-0 w-full bg-white border-t border-gray-100 shadow-xl py-4 flex flex-col animate-in slide-in-from-top-2 duration-200 h-screen overflow-y-auto pb-20">
                     {[
-                        { label: 'Flights', path: '/flights' },
-                        { label: 'Visas', path: '/visa' },
-                        { label: 'Study Visa', path: '/study-visa' },
-                        { label: 'Hotels', path: '/hotels' },
-                        { label: 'Packages', path: '/packages' },
-                        { label: 'About', path: '/about' }
+                        { label: t('nav.flights'), path: '/flights' },
+                        { label: t('nav.visas'), path: '/visa' },
+                        { label: t('nav.studyVisa'), path: '/study-visa' },
+                        { label: t('nav.hotels'), path: '/hotels' },
+                        { label: t('nav.packages'), path: '/packages' },
+                        { label: t('nav.about'), path: '/about' }
                     ].map((item) => (
                         <Link
                             key={item.label}
@@ -217,7 +220,7 @@ const TopBar = () => {
                             {languages.map(l => (
                                 <button
                                     key={l.code}
-                                    onClick={() => setLanguage(l.code)}
+                                    onClick={() => setLanguage(l.code as any)}
                                     className={`block text-sm mb-1 ${language === l.code ? 'text-[#F49129] font-bold' : 'text-slate-600'}`}
                                 >
                                     {l.label}
@@ -230,18 +233,21 @@ const TopBar = () => {
                         {isAuthenticated ? (
                             <>
                                 <Link to="/dashboard" className="py-2 text-slate-600 font-medium flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
-                                    <User size={16} /> My Dashboard
+                                    <User size={16} /> {t('nav.dashboard')}
                                 </Link>
                                 <button onClick={handleLogout} className="py-2 text-red-500 font-medium flex items-center gap-2 text-left">
-                                    <LogOut size={16} /> Sign Out
+                                    <LogOut size={16} /> {t('nav.signOut')}
                                 </button>
                             </>
                         ) : (
                             <>
-                                <Link to="/login" className="py-2 text-slate-600 text-center border border-slate-200 rounded-full">Sign In</Link>
-                                <Link to="/signup" className="btn-accent text-center w-full py-3">Get Started</Link>
+                                <Link to="/login" className="py-2 text-slate-600 text-center border border-slate-200 rounded-full" onClick={() => setIsMenuOpen(false)}>{t('nav.signIn')}</Link>
+                                <Link to="/signup" className="btn-accent text-center w-full py-3" onClick={() => setIsMenuOpen(false)}>{t('nav.getStarted')}</Link>
                             </>
                         )}
+                    </div>
+                    <div className="px-6 pb-6 text-center text-xs text-slate-300">
+                        v1.1 (CORS+Auth Fix)
                     </div>
                 </div>
             )}

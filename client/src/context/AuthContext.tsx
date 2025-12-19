@@ -24,6 +24,24 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Helper to handle inconsistent backend responses (nested profile vs flat)
+const normalizeUser = (userData: any): User | null => {
+    if (!userData) return null;
+
+    // Check if we have a nested profile object
+    const profile = userData.profile || {};
+
+    return {
+        id: userData.id,
+        email: userData.email,
+        // Prefer top-level properties, fallback to profile properties
+        phone: userData.phone || profile.phone,
+        role: userData.role || profile.role,
+        avatar_url: userData.avatar_url || profile.avatar_url,
+        full_name: userData.full_name || profile.full_name || profile.fullName
+    };
+};
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState<string | null>(() => {
@@ -45,7 +63,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 try {
                     // Fetch user profile from backend
                     const response = await api.get('/auth/me');
-                    setUser(response.data.user);
+                    setUser(normalizeUser(response.data.user));
                 } catch (error) {
                     console.error('Failed to load user:', error);
                     // logout(); // Don't logout immediately, maybe token just expired or network error
@@ -72,7 +90,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
                 try {
                     const response = await api.get('/auth/me'); // This verifies the token with backend
-                    setUser(response.data.user);
+                    setUser(normalizeUser(response.data.user));
                 } catch (e) {
                     // Profile might not exist if user just signed up via OAuth
                     // We might need to create it?
@@ -92,7 +110,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const login = (newToken: string, newUser: User) => {
         localStorage.setItem('token', newToken);
         setToken(newToken);
-        setUser(newUser);
+        setUser(normalizeUser(newUser));
     };
 
     const logout = () => {
@@ -103,7 +121,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const updateUser = (updatedUser: User) => {
-        setUser(updatedUser);
+        setUser(normalizeUser(updatedUser));
     };
 
     return (

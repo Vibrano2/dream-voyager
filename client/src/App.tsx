@@ -4,6 +4,7 @@ import Footer from './components/layout/Footer';
 import ChatWidget from './components/common/ChatWidget';
 import ScrollToTop from './components/common/ScrollToTop';
 import { AuthProvider } from './context/AuthContext';
+import { LanguageProvider } from './context/LanguageContext';
 
 // Pages
 import Home from './pages/Home';
@@ -34,46 +35,48 @@ import AdminSettings from './pages/admin/Settings';
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <ScrollToTop />
-        <div className="min-h-screen bg-brand-skyblue flex flex-col">
-          <TopBar />
-          <main className="flex-1 bg-white">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/my-bookings" element={<MyBookings />} />
-              <Route path="/payment/:bookingId" element={<Payment />} />
-              <Route path="/booking/confirm/:bookingId" element={<BookingConfirmation />} />
+      <LanguageProvider>
+        <Router>
+          <ScrollToTop />
+          <div className="min-h-screen bg-brand-skyblue flex flex-col">
+            <TopBar />
+            <main className="flex-1 bg-white">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/my-bookings" element={<MyBookings />} />
+                <Route path="/payment/:bookingId" element={<Payment />} />
+                <Route path="/booking/confirm/:bookingId" element={<BookingConfirmation />} />
 
-              {/* Admin Routes */}
-              <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<AdminDashboard />} />
-                <Route path="bookings" element={<AdminBookings />} />
-                <Route path="packages" element={<AdminPackages />} />
-                <Route path="users" element={<AdminUsers />} />
-                <Route path="settings" element={<AdminSettings />} />
-              </Route>
+                {/* Admin Routes */}
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin" element={<AdminLayout />}>
+                  <Route index element={<AdminDashboard />} />
+                  <Route path="bookings" element={<AdminBookings />} />
+                  <Route path="packages" element={<AdminPackages />} />
+                  <Route path="users" element={<AdminUsers />} />
+                  <Route path="settings" element={<AdminSettings />} />
+                </Route>
 
-              <Route path="/destinations" element={<Destinations />} />
-              <Route path="/packages" element={<Packages />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/flights" element={<Flights />} />
-              <Route path="/visa" element={<Visa />} />
-              <Route path="/study-visa" element={<StudyVisa />} />
-              <Route path="/hotels" element={<Hotels />} />
-              <Route path="/honeymoon" element={<Honeymoon />} />
-              <Route path="/corporate" element={<Corporate />} />
-              <Route path="/about" element={<About />} />
-            </Routes>
-          </main>
-          <Footer />
-          <ChatWidget />
-        </div>
-      </Router>
+                <Route path="/destinations" element={<Destinations />} />
+                <Route path="/packages" element={<Packages />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/flights" element={<Flights />} />
+                <Route path="/visa" element={<Visa />} />
+                <Route path="/study-visa" element={<StudyVisa />} />
+                <Route path="/hotels" element={<Hotels />} />
+                <Route path="/honeymoon" element={<Honeymoon />} />
+                <Route path="/corporate" element={<Corporate />} />
+                <Route path="/about" element={<About />} />
+              </Routes>
+            </main>
+            <Footer />
+            <ChatWidget />
+          </div>
+        </Router>
+      </LanguageProvider>
     </AuthProvider>
   );
 }

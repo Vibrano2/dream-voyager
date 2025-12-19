@@ -15,8 +15,7 @@ const Login = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // DEBUG: Temporary alert to confirm interaction
-        alert('DEBUG: Form Submitted (Logic Started)...');
+        // DEBUG: Form Submitted (Logic Started)...
         setError('');
         setLoading(true);
 
@@ -32,7 +31,6 @@ const Login = () => {
             const errorMsg = err.response?.data?.error || err.message || 'Failed to login.';
             setError(errorMsg);
             // DEBUG: Show actual error on mobile
-            alert(`Login Failed: ${errorMsg}\nURL: ${api.defaults.baseURL}`);
         } finally {
             setLoading(false);
         }
@@ -43,7 +41,7 @@ const Login = () => {
             className="min-h-screen pt-24 pb-12 flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-cover bg-center relative"
             style={{ backgroundImage: "url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')" }}
         >
-            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm pointer-events-none"></div>
 
             <div className="relative z-10 sm:mx-auto sm:w-full sm:max-w-md">
                 <Link to="/" className="flex justify-center mb-6">
@@ -133,7 +131,6 @@ const Login = () => {
                         <div>
                             <button
                                 type="submit"
-                                onClick={() => alert('DEBUG: Button physical click detected!')}
                                 disabled={loading}
                                 className={`w-full flex justify-center py-2.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white transition-all duration-200
                                 ${loading
