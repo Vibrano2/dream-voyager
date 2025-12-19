@@ -60,7 +60,6 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     const [language, setLanguage] = useState<Language>('EN');
 
     const handleSetLanguage = (lang: Language) => {
-        console.log('LanguageContext: changing language to', lang);
         setLanguage(lang);
     };
 

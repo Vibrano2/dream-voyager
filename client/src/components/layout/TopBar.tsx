@@ -11,8 +11,6 @@ const TopBar = () => {
     const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
     const [isLangOpen, setIsLangOpen] = useState(false);
 
-    console.log('TopBar: rendering with language:', language);
-
     const { user, logout, isAuthenticated } = useAuth();
     const navigate = useNavigate();
 
@@ -245,9 +243,6 @@ const TopBar = () => {
                                 <Link to="/signup" className="btn-accent text-center w-full py-3" onClick={() => setIsMenuOpen(false)}>{t('nav.getStarted')}</Link>
                             </>
                         )}
-                    </div>
-                    <div className="px-6 pb-6 text-center text-xs text-slate-300">
-                        v1.1 (CORS+Auth Fix)
                     </div>
                 </div>
             )}
