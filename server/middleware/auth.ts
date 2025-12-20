@@ -36,8 +36,14 @@ export const requireRole = (allowedRoles: string[]) => {
             return res.status(401).json({ error: 'User not authenticated' });
         }
 
-        // Ideally, roles are stored in a 'profiles' or 'user_roles' table.
-        // For this implementation, we'll query the public.profiles table.
+        // Check user_metadata first (avoids DB RLS recursion)
+        const metadataRole = req.user.user_metadata?.role;
+        if (metadataRole && allowedRoles.includes(metadataRole)) {
+            req.role = metadataRole;
+            return next();
+        }
+
+        // Fallback: Query profile table (only if metadata fails)
         const { data: profile, error } = await supabase
             .from('profiles')
             .select('role')
