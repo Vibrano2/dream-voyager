@@ -60,6 +60,13 @@ export const getPackageById = async (req: Request, res: Response) => {
 export const createPackage = async (req: Request, res: Response) => {
     try {
         const packageData = req.body;
+
+        // Map frontend 'destination' to database 'location'
+        if (packageData.destination && !packageData.location) {
+            packageData.location = packageData.destination;
+            delete packageData.destination; // Optional: Remove if DB treats it as extra
+        }
+
         console.log('[Create Package] Payload:', JSON.stringify(packageData, null, 2));
 
         // Use User Context for RLS (Fixes Service Key missing issue on Prod)
@@ -110,6 +117,12 @@ export const updatePackage = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const updates = req.body;
+
+        // Map frontend 'destination' to database 'location'
+        if (updates.destination && !updates.location) {
+            updates.location = updates.destination;
+            delete updates.destination;
+        }
         console.log(`[Update Package] ID: ${id}, Payload:`, JSON.stringify(updates, null, 2));
 
         // Use User Context for RLS
