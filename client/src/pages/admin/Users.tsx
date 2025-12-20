@@ -20,18 +20,20 @@ const AdminUsers = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
 
+    const fetchUsers = async () => {
+        try {
+            const res = await api.get('/admin/users');
+            setUsers(res.data);
+        } catch (error) {
+            console.error('Failed to fetch users', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         fetchUsers();
     }, []);
-
-    try {
-        const res = await api.get('/admin/users');
-        setUsers(res.data);
-    } catch (error) {
-        console.error('Failed to fetch users', error);
-    } finally {
-        setLoading(false);
-    }
 };
 
 const updateUserRole = async (userId: string, newRole: string) => {
