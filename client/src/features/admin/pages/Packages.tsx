@@ -54,7 +54,13 @@ const AdminPackages = () => {
     const fetchPackages = async () => {
         try {
             const res = await api.get('/packages');
-            setPackages(res.data);
+            if (res.data && Array.isArray(res.data.packages)) {
+                setPackages(res.data.packages);
+            } else if (Array.isArray(res.data)) {
+                setPackages(res.data);
+            } else {
+                setPackages([]);
+            }
         } catch (error) {
             console.error('Failed to fetch packages', error);
             // alert('Failed to fetch packages');
