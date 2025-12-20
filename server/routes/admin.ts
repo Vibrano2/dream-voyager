@@ -146,6 +146,7 @@ router.get('/settings', async (req, res) => {
             .single();
 
         if (error) throw error;
+        console.log('GET /settings found row:', data);
         res.json(data);
     } catch (error: any) {
         res.status(500).json({ error: error.message });
