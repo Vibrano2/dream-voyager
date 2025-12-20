@@ -1,5 +1,5 @@
 import { useLocation, Navigate } from 'react-router-dom';
-import BookingForm from '../components/booking/BookingForm';
+import BookingForm from '../../../components/booking/BookingForm';
 
 const Book = () => {
     const location = useLocation();

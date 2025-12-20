@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import api from '../services/api';
-import { supabase } from '../services/supabase';
+import api from '../../../services/api';
+import { supabase } from '../../../services/supabase';
 
 // Types
 interface User {

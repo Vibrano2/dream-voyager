@@ -1,14 +1,9 @@
-import express, { Request, Response } from 'express';
-import { requireAuth, requireRole } from '../middleware/auth.js';
+import { Request, Response } from 'express';
+import { createClient } from '@supabase/supabase-js';
 import supabase from '../config/supabase.js';
 
-const router = express.Router();
-
-/**
- * GET /api/packages
- * Get all available packages (public)
- */
-router.get('/', async (req: Request, res: Response) => {
+// @desc    Get all available packages
+export const getPackages = async (req: Request, res: Response) => {
     try {
         const { category, featured } = req.query;
 
@@ -37,13 +32,10 @@ router.get('/', async (req: Request, res: Response) => {
         console.error('Get packages error:', error);
         res.status(500).json({ error: error.message });
     }
-});
+};
 
-/**
- * GET /api/packages/:id
- * Get a single package by ID
- */
-router.get('/:id', async (req: Request, res: Response) => {
+// @desc    Get a single package by ID
+export const getPackageById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
@@ -62,25 +54,32 @@ router.get('/:id', async (req: Request, res: Response) => {
         console.error('Get package error:', error);
         res.status(500).json({ error: error.message });
     }
-});
+};
 
-/**
- * POST /api/packages
- * Create a new package (admin only)
- */
-router.post('/', requireAuth, requireRole(['admin']), async (req: Request, res: Response) => {
+// @desc    Create a new package (admin only)
+export const createPackage = async (req: Request, res: Response) => {
     try {
         const packageData = req.body;
+        console.log('[Create Package] Payload:', JSON.stringify(packageData, null, 2));
 
-        const { data: newPackage, error } = await supabase
+        // Use User Context for RLS (Fixes Service Key missing issue on Prod)
+        // We create a new client that "acts as" the user making the request.
+        const token = req.headers.authorization?.split(' ')[1];
+        const userClient = createClient(
+            process.env.SUPABASE_URL!,
+            process.env.SUPABASE_ANON_KEY!,
+            { global: { headers: { Authorization: `Bearer ${token}` } } }
+        );
+
+        const { data: newPackage, error } = await userClient
             .from('packages')
             .insert([packageData])
             .select()
             .single();
 
         if (error) {
-            console.error('Create package error:', error);
-            return res.status(500).json({ error: 'Failed to create package' });
+            console.error('[Create Package Error] DB Error:', JSON.stringify(error, null, 2));
+            return res.status(500).json({ error: `Failed to create package: ${error.message}` });
         }
 
         res.status(201).json({ package: newPackage, message: 'Package created successfully' });
@@ -88,18 +87,24 @@ router.post('/', requireAuth, requireRole(['admin']), async (req: Request, res: 
         console.error('Create package error:', error);
         res.status(500).json({ error: error.message });
     }
-});
+};
 
-/**
- * PUT /api/packages/:id
- * Update a package (admin only)
- */
-router.put('/:id', requireAuth, requireRole(['admin']), async (req: Request, res: Response) => {
+// @desc    Update a package (admin only)
+export const updatePackage = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const updates = req.body;
+        console.log(`[Update Package] ID: ${id}, Payload:`, JSON.stringify(updates, null, 2));
 
-        const { data: updatedPackage, error } = await supabase
+        // Use User Context for RLS
+        const token = req.headers.authorization?.split(' ')[1];
+        const userClient = createClient(
+            process.env.SUPABASE_URL!,
+            process.env.SUPABASE_ANON_KEY!,
+            { global: { headers: { Authorization: `Bearer ${token}` } } }
+        );
+
+        const { data: updatedPackage, error } = await userClient
             .from('packages')
             .update(updates)
             .eq('id', id)
@@ -107,8 +112,8 @@ router.put('/:id', requireAuth, requireRole(['admin']), async (req: Request, res
             .single();
 
         if (error) {
-            console.error('Update package error:', error);
-            return res.status(500).json({ error: 'Failed to update package' });
+            console.error('[Update Package Error] DB Error:', JSON.stringify(error, null, 2));
+            return res.status(500).json({ error: `Failed to update package: ${error.message}` });
         }
 
         res.status(200).json({ package: updatedPackage, message: 'Package updated successfully' });
@@ -116,13 +121,10 @@ router.put('/:id', requireAuth, requireRole(['admin']), async (req: Request, res
         console.error('Update package error:', error);
         res.status(500).json({ error: error.message });
     }
-});
+};
 
-/**
- * DELETE /api/packages/:id
- * Delete a package (admin only)
- */
-router.delete('/:id', requireAuth, requireRole(['admin']), async (req: Request, res: Response) => {
+// @desc    Delete a package (admin only)
+export const deletePackage = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
@@ -141,6 +143,4 @@ router.delete('/:id', requireAuth, requireRole(['admin']), async (req: Request, 
         console.error('Delete package error:', error);
         res.status(500).json({ error: error.message });
     }
-});
-
-export default router;
+};

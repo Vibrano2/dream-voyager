@@ -1,13 +1,8 @@
-import express, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import supabase from '../config/supabase.js';
-import { requireAuth } from '../middleware/auth.js';
 
-const router = express.Router();
-
-// @route   POST /api/auth/signup
 // @desc    Register a new user
-// @access  Public
-router.post('/signup', async (req: Request, res: Response) => {
+export const signup = async (req: Request, res: Response) => {
     const { email, password, fullName, phone, role = 'customer' } = req.body;
 
     if (!email || !password || !fullName) {
@@ -37,7 +32,6 @@ router.post('/signup', async (req: Request, res: Response) => {
         }
 
         // 2. Create profile in public.profiles table
-        // Note: We're doing this manually here, but sophisticated setups might use a Postgres Trigger
         const { error: profileError } = await supabase
             .from('profiles')
             .insert([
@@ -51,7 +45,6 @@ router.post('/signup', async (req: Request, res: Response) => {
             ]);
 
         if (profileError) {
-            // Ideally we might want to rollback the auth user creation here, but for now log error
             console.error('Profile creation failed:', profileError);
             return res.status(500).json({ error: 'User created but profile setup failed' });
         }
@@ -71,12 +64,10 @@ router.post('/signup', async (req: Request, res: Response) => {
         console.error('Signup error:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
-});
+};
 
-// @route   POST /api/auth/login
 // @desc    Authenticate user & get token
-// @access  Public
-router.post('/login', async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -123,7 +114,6 @@ router.post('/login', async (req: Request, res: Response) => {
         }
 
         // Sync: If Auth Metadata says admin, but Profile doesn't, trust Auth and update Profile
-        // This fixes the issue where a user is made admin in Supabase Auth but Profiles table lags behind
         if (data.user.user_metadata?.role === 'admin' && profile?.role !== 'admin') {
             console.log('Syncing Admin role from Auth to Profile...');
             const { data: updatedProfile, error: syncError } = await supabase
@@ -138,20 +128,22 @@ router.post('/login', async (req: Request, res: Response) => {
             }
         }
 
+        // SECURITY: Prioritize Database Profile Role over JWT Metadata
+        // We treat the database 'profiles' table as the single source of truth.
+        const effectiveRole = profile?.role || 'customer';
 
-
-        // Force 'admin' if metadata says so, otherwise use profile role
-        const metadataRole = data.user.user_metadata?.role;
-        const profileRole = profile?.role;
-        const effectiveRole = metadataRole === 'admin' ? 'admin' : (profileRole || 'customer');
+        // Optional warning if they mismatch (for debugging)
+        if (data.user.user_metadata?.role === 'admin' && effectiveRole !== 'admin') {
+            console.warn(`[Login] Security Warning: User ${data.user.email} has 'admin' in metadata but '${effectiveRole}' in DB. Using DB role.`);
+        }
 
         res.json({
             message: 'Login successful',
             user: {
                 id: data.user.id,
                 email: data.user.email,
-                user_metadata: data.user.user_metadata,
-                role: effectiveRole, // Force calculated role
+                user_metadata: data.user.user_metadata, // Keep for reference if needed, but UI should favor 'role'
+                role: effectiveRole,
                 full_name: profile?.full_name || data.user.user_metadata?.full_name,
                 avatar_url: profile?.avatar_url
             },
@@ -162,37 +154,26 @@ router.post('/login', async (req: Request, res: Response) => {
         console.error('Login error:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
-});
+};
 
-// @route   POST /api/auth/logout
 // @desc    Logout user
-// @access  Private (requires token to logout properly on server side if needed, but mostly client side)
-router.post('/logout', async (req: Request, res: Response) => {
+export const logout = async (req: Request, res: Response) => {
     try {
-        // Supabase signout invalidates the session
         const token = req.headers.authorization?.split(' ')[1];
         if (token) {
             const { error } = await supabase.auth.signOut();
-            // signOut does not take token in JS client, it relies on current session.
-            // For stateless backend, we can't easily invalidate the token on Supabase side 
-            // without admin API methods like admin.signOut(uid).
-            // But for now, we'll just acknowledge the request.
         }
-
         res.json({ message: 'Logged out successfully' });
     } catch (error) {
         res.status(500).json({ error: 'Logout failed' });
     }
-});
+};
 
-// @route   GET /api/auth/me
 // @desc    Get current user profile
-// @access  Private
-router.get('/me', requireAuth, async (req: Request, res: Response) => {
+export const getProfile = async (req: Request, res: Response) => {
     try {
         const user = req.user;
 
-        // Fetch full profile
         const { data: profile, error } = await supabase
             .from('profiles')
             .select('*')
@@ -214,6 +195,4 @@ router.get('/me', requireAuth, async (req: Request, res: Response) => {
         console.error('Get profile error:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
-});
-
-export default router;
+};

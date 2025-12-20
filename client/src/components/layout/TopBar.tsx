@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Phone, Mail, User, Menu, X, LogOut, ChevronDown, Globe } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../features/auth/context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 
 const TopBar = () => {

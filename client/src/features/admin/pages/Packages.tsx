@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Plus, Edit2, Trash2, Search, X, Image as ImageIcon } from 'lucide-react';
-import api from '../../services/api';
+import api from '../../../services/api';
 
 interface Package {
     id: string;
@@ -73,9 +73,10 @@ const AdminPackages = () => {
             }
             fetchPackages();
             closeModal();
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to save package', error);
-            alert('Failed to save package. Please try again.');
+            const errMsg = error.response?.data?.error || error.message || 'Unknown error';
+            alert(`Failed to save: ${errMsg}`);
         }
     };
 

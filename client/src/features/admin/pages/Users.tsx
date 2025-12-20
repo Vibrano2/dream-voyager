@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Search, Shield, User, Mail, Phone, Calendar, Edit2, X } from 'lucide-react';
-import api from '../../services/api';
+import api from '../../../services/api';
 
 interface UserProfile {
     id: string;

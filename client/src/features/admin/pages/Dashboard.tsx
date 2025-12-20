@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { DollarSign, ShoppingBag, Users as UsersIcon, Activity } from 'lucide-react';
-import api from '../../services/api';
+import api from '../../../services/api';
 
 const AdminDashboard = () => {
     const [stats, setStats] = useState({

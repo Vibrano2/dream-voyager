@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, Users, Mail, Phone, User, MessageSquare, CreditCard } from 'lucide-react';
 import api from '../../services/api';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../features/auth/context/AuthContext';
 
 interface BookingFormProps {
     packageId?: string;

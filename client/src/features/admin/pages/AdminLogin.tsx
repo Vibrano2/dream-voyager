@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import api from '../../services/api';
+import { useAuth } from '../../auth/context/AuthContext';
+import api from '../../../services/api';
 import { Mail, Lock, Shield } from 'lucide-react';
 
 const AdminLogin = () => {

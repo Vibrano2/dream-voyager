@@ -3,13 +3,13 @@ import TopBar from './components/layout/TopBar';
 import Footer from './components/layout/Footer';
 import ChatWidget from './components/common/ChatWidget';
 import ScrollToTop from './components/common/ScrollToTop';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider } from './features/auth/context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
 
 // Pages
 import Home from './pages/Home';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
+import Login from './features/auth/pages/Login';
+import Signup from './features/auth/pages/Signup';
 import Dashboard from './pages/Dashboard';
 import Destinations from './pages/Destinations';
 import Packages from './pages/Packages';
@@ -21,17 +21,17 @@ import Visa from './pages/Visa';
 import StudyVisa from './pages/StudyVisa';
 import Honeymoon from './pages/Honeymoon';
 import Corporate from './pages/Corporate';
-import MyBookings from './pages/MyBookings';
+import MyBookings from './features/bookings/pages/MyBookings';
 import Payment from './pages/Payment';
-import BookingConfirmation from './pages/BookingConfirmation';
-import Book from './pages/Book';
-import AdminLayout from './components/layout/AdminLayout';
-import AdminLogin from './pages/admin/AdminLogin';
-import AdminDashboard from './pages/admin/Dashboard';
-import AdminBookings from './pages/admin/Bookings';
-import AdminPackages from './pages/admin/Packages';
-import AdminUsers from './pages/admin/Users';
-import AdminSettings from './pages/admin/Settings';
+import BookingConfirmation from './features/bookings/pages/BookingConfirmation';
+import Book from './features/bookings/pages/Book';
+import AdminLayout from './features/admin/layouts/AdminLayout';
+import AdminLogin from './features/admin/pages/AdminLogin';
+import AdminDashboard from './features/admin/pages/Dashboard';
+import AdminBookings from './features/admin/pages/Bookings';
+import AdminPackages from './features/admin/pages/Packages';
+import AdminUsers from './features/admin/pages/Users';
+import AdminSettings from './features/admin/pages/Settings';
 
 function App() {
   return (

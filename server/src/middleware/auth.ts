@@ -36,14 +36,8 @@ export const requireRole = (allowedRoles: string[]) => {
             return res.status(401).json({ error: 'User not authenticated' });
         }
 
-        // Check user_metadata first (avoids DB RLS recursion)
-        const metadataRole = req.user.user_metadata?.role;
-        if (metadataRole && allowedRoles.includes(metadataRole)) {
-            req.role = metadataRole;
-            return next();
-        }
-
-        // Fallback: Query profile table (only if metadata fails)
+        // STRICT SECURITY: Always verify against the database.
+        // We do not trust user_metadata from the JWT as it can be stale or manipulated.
         const { data: profile, error } = await supabase
             .from('profiles')
             .select('role')
@@ -51,14 +45,19 @@ export const requireRole = (allowedRoles: string[]) => {
             .single();
 
         if (error || !profile) {
+            console.error('[Auth Middleware] Profile lookup failed:', error);
             return res.status(403).json({ error: 'Access denied: Profile not found' });
         }
 
-        if (!allowedRoles.includes(profile.role)) {
+        const userRole = profile.role || 'customer';
+
+        if (!allowedRoles.includes(userRole)) {
+            console.warn(`[Auth Middleware] Access denied. User ${req.user.id} has role '${userRole}', required: ${allowedRoles.join(', ')}`);
             return res.status(403).json({ error: 'Access denied: Insufficient permissions' });
         }
 
-        req.role = profile.role;
+        // Attach verified role to request
+        req.role = userRole;
         next();
     };
 };

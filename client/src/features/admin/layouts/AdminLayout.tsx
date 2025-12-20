@@ -1,6 +1,6 @@
 import { Outlet, Link, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { LayoutDashboard, Package, Users, CalendarDays, LogOut, Settings } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../auth/context/AuthContext';
 
 const AdminLayout = () => {
     const { user, logout, loading } = useAuth();

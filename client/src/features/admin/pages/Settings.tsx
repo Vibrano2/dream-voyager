@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Save, Mail, DollarSign, Globe, Shield } from 'lucide-react';
-import api from '../../services/api';
+import api from '../../../services/api';
 
 const AdminSettings = () => {
     const [settings, setSettings] = useState({

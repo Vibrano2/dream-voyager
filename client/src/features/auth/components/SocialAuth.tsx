@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { supabase } from '../../services/supabase';
+import { supabase } from '../../../services/supabase';
 
 const SocialAuth = () => {
     const [loading, setLoading] = useState(false);

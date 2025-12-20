@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, Users, Eye, XCircle, Download } from 'lucide-react';
-import api from '../services/api';
-import { useAuth } from '../context/AuthContext';
+import api from '../../../services/api';
+import { useAuth } from '../../auth/context/AuthContext';
 
 interface Booking {
     id: string;
@@ -105,8 +105,8 @@ const MyBookings = () => {
                             key={status}
                             onClick={() => setFilter(status)}
                             className={`px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap ${filter === status
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-white text-slate-600 hover:bg-slate-100'
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-white text-slate-600 hover:bg-slate-100'
                                 }`}
                         >
                             {status.charAt(0).toUpperCase() + status.slice(1)}

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plane, Calendar, Users, MapPin, ArrowRight, Search, Filter, Star, Clock, X, CheckCircle2, AlertCircle } from 'lucide-react';
 import api from '../services/api';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../features/auth/context/AuthContext';
 
 interface Flight {
     id: number;

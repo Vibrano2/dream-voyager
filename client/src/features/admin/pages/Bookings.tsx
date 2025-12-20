@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Eye, Trash2 } from 'lucide-react';
-import api from '../../services/api';
+import api from '../../../services/api';
 
 const AdminBookings = () => {
     const [bookings, setBookings] = useState<any[]>([]);
