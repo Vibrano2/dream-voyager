@@ -86,4 +86,55 @@ router.put('/bookings/:id', async (req, res) => {
     }
 });
 
+// GET /api/admin/users - List all users
+router.get('/users', async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        res.json(data);
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// PUT /api/admin/users/:id - Update user role
+router.put('/users/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { role } = req.body;
+
+        if (!['admin', 'customer', 'agent'].includes(role)) {
+            return res.status(400).json({ error: 'Invalid role' });
+        }
+
+        // Update profile role
+        const { data, error } = await supabase
+            .from('profiles')
+            .update({ role })
+            .eq('id', id)
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        // Also try to update auth.users metadata if the service key has permission (usually yes)
+        try {
+            await supabase.auth.admin.updateUserById(id, {
+                user_metadata: { role }
+            });
+        } catch (authError) {
+            console.warn('Failed to update auth.users metadata:', authError);
+            // Don't fail the request if just metadata update fails, as profile is source of truth for our API
+        }
+
+        res.json(data);
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 export const adminRouter = router;

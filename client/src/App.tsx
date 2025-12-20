@@ -24,6 +24,7 @@ import Corporate from './pages/Corporate';
 import MyBookings from './pages/MyBookings';
 import Payment from './pages/Payment';
 import BookingConfirmation from './pages/BookingConfirmation';
+import Book from './pages/Book';
 import AdminLayout from './components/layout/AdminLayout';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/Dashboard';
@@ -69,7 +70,9 @@ function App() {
                 <Route path="/hotels" element={<Hotels />} />
                 <Route path="/honeymoon" element={<Honeymoon />} />
                 <Route path="/corporate" element={<Corporate />} />
+                <Route path="/corporate" element={<Corporate />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/book" element={<Book />} />
               </Routes>
             </main>
             <Footer />

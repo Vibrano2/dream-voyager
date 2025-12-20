@@ -5,11 +5,12 @@ import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 
 interface BookingFormProps {
-    packageId: string;
+    packageId?: string;
     packageTitle: string;
     packagePrice: number;
     packageImage?: string;
     packageLocation?: string;
+    bookingType?: 'package' | 'flight' | 'visa' | 'study-visa' | 'custom';
 }
 
 interface PassengerDetail {
@@ -18,7 +19,7 @@ interface PassengerDetail {
     passport?: string;
 }
 
-const BookingForm = ({ packageId, packageTitle, packagePrice, packageImage, packageLocation }: BookingFormProps) => {
+const BookingForm = ({ packageId, packageTitle, packagePrice, packageImage, packageLocation, bookingType = 'package' }: BookingFormProps) => {
     const navigate = useNavigate();
     const { user } = useAuth();
     const [loading, setLoading] = useState(false);
@@ -75,16 +76,26 @@ const BookingForm = ({ packageId, packageTitle, packagePrice, packageImage, pack
                 return;
             }
 
-            // Create booking
-            const response = await api.post('/bookings', {
-                package_id: packageId,
+            // Create booking payload
+            const bookingPayload: any = {
                 passengers: formData.numberOfTravelers,
                 travel_date: formData.travelDate,
                 passenger_details: passengers,
                 special_requests: formData.specialRequests,
                 contact_email: formData.contactEmail,
-                contact_phone: formData.contactPhone
-            });
+                contact_phone: formData.contactPhone,
+                booking_type: bookingType
+            };
+
+            // Add package_id or custom_price based on context
+            if (packageId) {
+                bookingPayload.package_id = packageId;
+            } else {
+                bookingPayload.custom_price = packagePrice;
+            }
+
+            // Create booking
+            const response = await api.post('/bookings', bookingPayload);
 
             if (response.data.success) {
                 // Redirect to payment page

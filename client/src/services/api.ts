@@ -5,8 +5,8 @@ const getApiUrl = () => {
     // Try environment variable first
     const envUrl = import.meta.env.VITE_API_URL;
 
-    // If environment variable exists, use it
-    if (envUrl) {
+    // If environment variable exists and IS NOT the placeholder, use it
+    if (envUrl && envUrl !== 'https://your-production-api.com/api') {
         console.log('Using API URL from environment:', envUrl);
         return envUrl;
     }

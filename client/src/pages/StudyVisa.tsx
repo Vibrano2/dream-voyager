@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { GraduationCap, Globe, BookOpen, FileText, ArrowRight, CheckCircle2, Clock, DollarSign, Users, Building2 } from 'lucide-react';
 
 interface University {
@@ -145,6 +146,7 @@ const studyDestinations: { [key: string]: StudyDestination } = {
 };
 
 const StudyVisa = () => {
+    const navigate = useNavigate();
     const [selectedCountry, setSelectedCountry] = useState<string>('');
     const [showDetails, setShowDetails] = useState(false);
 
@@ -300,7 +302,17 @@ const StudyVisa = () => {
                                 </div>
 
                                 <div className="flex flex-col sm:flex-row gap-4">
-                                    <button className="flex-1 btn-accent text-lg py-4 flex items-center justify-center gap-3">
+                                    <button
+                                        onClick={() => navigate('/book', {
+                                            state: {
+                                                packageTitle: `Study in ${selectedDestination.country}`,
+                                                packagePrice: parseInt(selectedDestination.visaFee.replace(/[^\d]/g, '')),
+                                                packageLocation: selectedDestination.country,
+                                                bookingType: 'study-visa'
+                                            }
+                                        })}
+                                        className="flex-1 btn-accent text-lg py-4 flex items-center justify-center gap-3"
+                                    >
                                         <GraduationCap size={22} />
                                         Start Application
                                         <ArrowRight size={22} />

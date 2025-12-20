@@ -94,22 +94,66 @@ router.post('/login', async (req: Request, res: Response) => {
         }
 
         // Fetch user profile to get the role
-        const { data: profile, error: profileError } = await supabase
+        let { data: profile, error: profileError } = await supabase
             .from('profiles')
             .select('role, full_name, avatar_url')
             .eq('id', data.user.id)
             .single();
 
-        if (profileError) {
-            console.warn('Profile fetch failed during login:', profileError);
+        // Self-healing: Create profile if missing
+        if (!profile) {
+            console.log('Profile missing for user, creating one...');
+            const { data: newProfile, error: createError } = await supabase
+                .from('profiles')
+                .insert({
+                    id: data.user.id,
+                    email: data.user.email,
+                    // Use metadata or default
+                    full_name: data.user.user_metadata?.full_name || email.split('@')[0],
+                    role: data.user.user_metadata?.role || 'customer'
+                })
+                .select()
+                .single();
+
+            if (!createError && newProfile) {
+                profile = newProfile;
+            } else {
+                console.error('Failed to auto-create profile:', createError);
+            }
         }
+
+        // Sync: If Auth Metadata says admin, but Profile doesn't, trust Auth and update Profile
+        // This fixes the issue where a user is made admin in Supabase Auth but Profiles table lags behind
+        if (data.user.user_metadata?.role === 'admin' && profile?.role !== 'admin') {
+            console.log('Syncing Admin role from Auth to Profile...');
+            const { data: updatedProfile, error: syncError } = await supabase
+                .from('profiles')
+                .update({ role: 'admin' })
+                .eq('id', data.user.id)
+                .select()
+                .single();
+
+            if (!syncError && updatedProfile) {
+                profile = updatedProfile;
+            }
+        }
+
+
+
+        // Force 'admin' if metadata says so, otherwise use profile role
+        const metadataRole = data.user.user_metadata?.role;
+        const profileRole = profile?.role;
+        const effectiveRole = metadataRole === 'admin' ? 'admin' : (profileRole || 'customer');
 
         res.json({
             message: 'Login successful',
             user: {
                 id: data.user.id,
                 email: data.user.email,
-                ...(profile || {})
+                user_metadata: data.user.user_metadata,
+                role: effectiveRole, // Force calculated role
+                full_name: profile?.full_name || data.user.user_metadata?.full_name,
+                avatar_url: profile?.avatar_url
             },
             session: data.session
         });

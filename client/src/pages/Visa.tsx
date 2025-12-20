@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Globe, FileText, CheckCircle2, ArrowRight, MapPin, Clock, DollarSign, AlertCircle } from 'lucide-react';
 
 interface VisaRequirement {
@@ -108,6 +109,7 @@ const visaData: { [key: string]: VisaInfo } = {
 };
 
 const Visa = () => {
+    const navigate = useNavigate();
     const [selectedCountry, setSelectedCountry] = useState<string>('');
     const [showRequirements, setShowRequirements] = useState(false);
 
@@ -260,7 +262,17 @@ const Visa = () => {
                                 </div>
 
                                 <div className="flex flex-col sm:flex-row gap-4">
-                                    <button className="flex-1 btn-accent text-lg py-4 flex items-center justify-center gap-3">
+                                    <button
+                                        onClick={() => navigate('/book', {
+                                            state: {
+                                                packageTitle: `${selectedVisa.country} Visa Application`,
+                                                packagePrice: parseInt(selectedVisa.fee.replace(/[^\d]/g, '')),
+                                                packageLocation: selectedVisa.country,
+                                                bookingType: 'visa'
+                                            }
+                                        })}
+                                        className="flex-1 btn-accent text-lg py-4 flex items-center justify-center gap-3"
+                                    >
                                         <FileText size={22} />
                                         Start Application
                                         <ArrowRight size={22} />
