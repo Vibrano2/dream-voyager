@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { createClient } from '@supabase/supabase-js';
 import supabase from '../config/supabase.js';
 
 // Extend Express Request interface to include user and role
@@ -37,8 +38,16 @@ export const requireRole = (allowedRoles: string[]) => {
         }
 
         // STRICT SECURITY: Always verify against the database.
-        // We do not trust user_metadata from the JWT as it can be stale or manipulated.
-        const { data: profile, error } = await supabase
+        // We Use a User-Scoped Client to ensure we are acting AS the user (RLS compatible).
+        // This avoids issues if the Server Service Key is missing/invalid.
+        const token = req.headers.authorization?.split(' ')[1];
+        const userClient = createClient(
+            process.env.SUPABASE_URL!,
+            process.env.SUPABASE_ANON_KEY!,
+            { global: { headers: { Authorization: `Bearer ${token}` } } }
+        );
+
+        const { data: profile, error } = await userClient
             .from('profiles')
             .select('role')
             .eq('id', req.user.id)
