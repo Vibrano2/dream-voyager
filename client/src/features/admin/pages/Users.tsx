@@ -23,7 +23,13 @@ const AdminUsers = () => {
     const fetchUsers = async () => {
         try {
             const res = await api.get('/admin/users');
-            setUsers(res.data);
+            if (Array.isArray(res.data)) {
+                setUsers(res.data);
+            } else if (res.data && Array.isArray(res.data.users)) {
+                setUsers(res.data.users);
+            } else {
+                setUsers([]);
+            }
         } catch (error) {
             console.error('Failed to fetch users', error);
         } finally {
