@@ -137,4 +137,44 @@ router.put('/users/:id', async (req, res) => {
     }
 });
 
+// GET /api/admin/settings - Get global settings
+router.get('/settings', async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from('settings')
+            .select('*')
+            .single();
+
+        if (error) throw error;
+        res.json(data);
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// PUT /api/admin/settings - Update global settings
+router.put('/settings', async (req, res) => {
+    try {
+        // We assume ID is always 1 (constraint in DB)
+        const updates = req.body;
+
+        // Remove id if present to allow update
+        delete updates.id;
+        delete updates.created_at;
+        delete updates.updated_at;
+
+        const { data, error } = await supabase
+            .from('settings')
+            .update({ ...updates, updated_at: new Date() })
+            .eq('id', 1)
+            .select()
+            .single();
+
+        if (error) throw error;
+        res.json(data);
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 export const adminRouter = router;

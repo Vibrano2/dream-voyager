@@ -11,7 +11,7 @@ interface Package {
     price: number;
     category: string;
     image_url?: string;
-    is_active: boolean;
+    available: boolean;
     // Study Visa specific fields
     universities?: string[];
     countries?: string[];
@@ -38,7 +38,7 @@ const AdminPackages = () => {
         price: 0,
         category: 'vacation',
         image_url: '',
-        is_active: true,
+        available: true,
         // Study Visa fields
         universities: [] as string[],
         countries: [] as string[],
@@ -57,11 +57,7 @@ const AdminPackages = () => {
             setPackages(res.data);
         } catch (error) {
             console.error('Failed to fetch packages', error);
-            // Mock data fallback
-            setPackages([
-                { id: '1', title: 'Bali Paradise', description: 'Amazing beach resort', destination: 'Bali, Indonesia', duration: 7, price: 2500000, category: 'vacation', is_active: true },
-                { id: '2', title: 'Paris Romance', description: 'City of love tour', destination: 'Paris, France', duration: 5, price: 3200000, category: 'honeymoon', is_active: true }
-            ]);
+            // alert('Failed to fetch packages');
         } finally {
             setLoading(false);
         }
@@ -134,7 +130,7 @@ const AdminPackages = () => {
                 price: pkg.price,
                 category: pkg.category,
                 image_url: pkg.image_url || '',
-                is_active: pkg.is_active,
+                available: pkg.available,
                 universities: pkg.universities || [],
                 countries: pkg.countries || [],
                 requirements: pkg.requirements || '',
@@ -152,7 +148,7 @@ const AdminPackages = () => {
                 price: 0,
                 category: 'vacation',
                 image_url: '',
-                is_active: true,
+                available: true,
                 universities: [],
                 countries: [],
                 requirements: '',
@@ -216,8 +212,8 @@ const AdminPackages = () => {
                         <div className="p-4">
                             <div className="flex items-start justify-between mb-2">
                                 <h3 className="font-bold text-lg text-slate-800">{pkg.title}</h3>
-                                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${pkg.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
-                                    {pkg.is_active ? 'Active' : 'Inactive'}
+                                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${pkg.available ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+                                    {pkg.available ? 'Active' : 'Inactive'}
                                 </span>
                             </div>
                             <p className="text-sm text-slate-600 mb-2">{pkg.destination}</p>
@@ -466,12 +462,12 @@ const AdminPackages = () => {
                             <div className="flex items-center gap-2">
                                 <input
                                     type="checkbox"
-                                    id="is_active"
-                                    checked={formData.is_active}
-                                    onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+                                    id="available"
+                                    checked={formData.available}
+                                    onChange={(e) => setFormData({ ...formData, available: e.target.checked })}
                                     className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
                                 />
-                                <label htmlFor="is_active" className="text-sm font-medium text-slate-700">Active Package</label>
+                                <label htmlFor="available" className="text-sm font-medium text-slate-700">Active Package</label>
                             </div>
                             <div className="flex gap-3 pt-4">
                                 <button

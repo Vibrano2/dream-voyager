@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, Mail, DollarSign, Globe, Shield } from 'lucide-react';
+import api from '../../services/api';
 
 const AdminSettings = () => {
     const [settings, setSettings] = useState({
@@ -14,16 +15,65 @@ const AdminSettings = () => {
         allowRegistration: true,
         requireEmailVerification: true
     });
-
+    const [loading, setLoading] = useState(true);
     const [saved, setSaved] = useState(false);
 
-    const handleSave = (e: React.FormEvent) => {
-        e.preventDefault();
-        // TODO: Save to backend
-        console.log('Saving settings:', settings);
-        setSaved(true);
-        setTimeout(() => setSaved(false), 3000);
+    useEffect(() => {
+        fetchSettings();
+    }, []);
+
+    const fetchSettings = async () => {
+        try {
+            const res = await api.get('/admin/settings');
+            if (res.data) {
+                // Map snake_case DB to camelCase State
+                setSettings({
+                    siteName: res.data.site_name,
+                    siteEmail: res.data.site_email,
+                    supportEmail: res.data.support_email,
+                    currency: res.data.currency,
+                    paystackPublicKey: res.data.paystack_public_key || '',
+                    paystackSecretKey: res.data.paystack_secret_key || '',
+                    resendApiKey: res.data.resend_api_key || '',
+                    maintenanceMode: res.data.maintenance_mode,
+                    allowRegistration: res.data.allow_registration,
+                    requireEmailVerification: res.data.require_email_verification
+                });
+            }
+        } catch (error) {
+            console.error('Failed to fetch settings', error);
+        } finally {
+            setLoading(false);
+        }
     };
+
+    const handleSave = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            // Map camelCase State to snake_case DB
+            const dbSettings = {
+                site_name: settings.siteName,
+                site_email: settings.siteEmail,
+                support_email: settings.supportEmail,
+                currency: settings.currency,
+                paystack_public_key: settings.paystackPublicKey,
+                paystack_secret_key: settings.paystackSecretKey,
+                resend_api_key: settings.resendApiKey,
+                maintenance_mode: settings.maintenanceMode,
+                allow_registration: settings.allowRegistration,
+                require_email_verification: settings.requireEmailVerification
+            };
+
+            await api.put('/admin/settings', dbSettings);
+            setSaved(true);
+            setTimeout(() => setSaved(false), 3000);
+        } catch (error) {
+            console.error('Failed to save settings', error);
+            alert('Failed to save settings');
+        }
+    };
+
+    if (loading) return <div>Loading settings...</div>;
 
     return (
         <div className="max-w-4xl">

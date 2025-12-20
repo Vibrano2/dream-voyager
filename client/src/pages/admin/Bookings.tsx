@@ -16,11 +16,7 @@ const AdminBookings = () => {
             setBookings(res.data);
         } catch (error) {
             console.error('Failed to fetch bookings', error);
-            // Mock data fallback
-            setBookings([
-                { id: '1', booking_reference: 'DV-88392', profiles: { full_name: 'Jane Doe', email: 'jane@example.com' }, packages: { title: 'Bali Escape' }, status: 'CONFIRMED', total_amount: 2500000, created_at: new Date().toISOString() },
-                { id: '2', booking_reference: 'DV-11234', profiles: { full_name: 'John Smith', email: 'john@example.com' }, packages: { title: 'Paris Tour' }, status: 'PENDING', total_amount: 3200000, created_at: new Date().toISOString() }
-            ]);
+            // alert('Failed to fetch bookings');
         } finally {
             setLoading(false);
         }
