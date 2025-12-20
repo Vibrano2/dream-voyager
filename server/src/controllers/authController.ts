@@ -187,13 +187,25 @@ export const getProfile = async (req: Request, res: Response) => {
     try {
         const user = req.user;
 
-        const { data: profile, error } = await supabase
+        // Use User Context for RLS compatibility
+        const token = req.headers.authorization?.split(' ')[1];
+        const supabaseUrl = process.env.SUPABASE_URL!;
+        const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY!;
+
+        const userClient = createClient(
+            supabaseUrl,
+            supabaseAnonKey,
+            { global: { headers: { Authorization: `Bearer ${token}` } } }
+        );
+
+        const { data: profile, error } = await userClient
             .from('profiles')
             .select('*')
             .eq('id', user.id)
             .single();
 
         if (error) {
+            console.error('[Get Profile] Failed to fetch profile:', error);
             return res.status(404).json({ error: 'Profile not found' });
         }
 

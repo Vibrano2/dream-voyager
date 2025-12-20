@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import api from '../../../services/api';
 import { supabase } from '../../../services/supabase';
 
@@ -107,33 +107,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return () => subscription.unsubscribe();
     }, [token]);
 
-    const login = (newToken: string, newUser: User) => {
+    const login = useCallback((newToken: string, newUser: User) => {
         localStorage.setItem('token', newToken);
         setToken(newToken);
         setUser(normalizeUser(newUser));
-    };
+    }, []);
 
-    const logout = () => {
+    const logout = useCallback(() => {
         localStorage.removeItem('token');
         setToken(null);
         setUser(null);
         // Optional: Call backend logout endpoint
-    };
+    }, []);
 
-    const updateUser = (updatedUser: User) => {
+    const updateUser = useCallback((updatedUser: User) => {
         setUser(normalizeUser(updatedUser));
+    }, []);
+
+    const value = {
+        user,
+        token,
+        loading,
+        login,
+        logout,
+        updateUser,
+        isAuthenticated: !!user
     };
 
     return (
-        <AuthContext.Provider value={{
-            user,
-            token,
-            loading,
-            login,
-            logout,
-            updateUser,
-            isAuthenticated: !!user
-        }}>
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );
