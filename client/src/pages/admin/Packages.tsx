@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Plus, Edit2, Trash2, Search, X, Upload, Image as ImageIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, X, Image as ImageIcon } from 'lucide-react';
 import api from '../../services/api';
 
 interface Package {
@@ -91,23 +91,7 @@ const AdminPackages = () => {
         }
     };
 
-    const handleImageUpload = async () => {
-        if (!imageFile) return formData.image_url;
 
-        // TODO: Implement actual image upload to cloud storage (e.g., Cloudinary, AWS S3)
-        // For now, return a placeholder URL
-        const formDataUpload = new FormData();
-        formDataUpload.append('image', imageFile);
-
-        try {
-            // const res = await api.post('/upload/image', formDataUpload);
-            // return res.data.url;
-            return imagePreview; // Temporary: use base64 preview
-        } catch (error) {
-            console.error('Image upload failed', error);
-            return formData.image_url;
-        }
-    };
 
     const handleDelete = async (id: string) => {
         if (!confirm('Are you sure you want to delete this package?')) return;
