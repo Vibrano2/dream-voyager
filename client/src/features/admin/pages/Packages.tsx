@@ -56,7 +56,7 @@ const AdminPackages = () => {
 
     const fetchPackages = async () => {
         try {
-            const res = await api.get('/packages');
+            const res = await api.get('/packages?show_hidden=true');
             if (res.data && Array.isArray(res.data.packages)) {
                 setPackages(res.data.packages);
             } else if (Array.isArray(res.data)) {

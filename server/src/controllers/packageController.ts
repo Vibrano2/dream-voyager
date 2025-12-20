@@ -5,12 +5,16 @@ import supabase from '../config/supabase.js';
 // @desc    Get all available packages
 export const getPackages = async (req: Request, res: Response) => {
     try {
-        const { category, featured } = req.query;
+        const { category, featured, show_hidden } = req.query;
 
         let query = supabase
             .from('packages')
-            .select('*')
-            .eq('available', true);
+            .select('*');
+
+        // Only filter by availability if we are NOT asking to show hidden (Admin)
+        if (show_hidden !== 'true') {
+            query = query.eq('available', true);
+        }
 
         if (category) {
             query = query.eq('category', category);
