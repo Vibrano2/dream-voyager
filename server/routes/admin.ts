@@ -172,6 +172,7 @@ router.put('/settings', async (req, res) => {
             .single();
 
         if (error) throw error;
+        console.log('PUT /settings updated:', data);
         res.json(data);
     } catch (error: any) {
         res.status(500).json({ error: error.message });

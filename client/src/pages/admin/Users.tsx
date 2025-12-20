@@ -330,6 +330,6 @@ return (
         )}
     </div>
 );
-};
+
 
 export default AdminUsers;
