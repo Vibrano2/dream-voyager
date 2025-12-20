@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { createClient } from '@supabase/supabase-js';
 import supabase from '../config/supabase.js';
 
 // @desc    Register a new user
@@ -84,8 +85,20 @@ export const login = async (req: Request, res: Response) => {
             return res.status(401).json({ error: error.message });
         }
 
+        // Use User Context for RLS compatibility
+        // Now that we have a session, we can act AS the user to read/write their own profile.
+        const token = data.session.access_token;
+        const supabaseUrl = process.env.SUPABASE_URL!;
+        const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY!;
+
+        const userClient = createClient(
+            supabaseUrl,
+            supabaseAnonKey,
+            { global: { headers: { Authorization: `Bearer ${token}` } } }
+        );
+
         // Fetch user profile to get the role
-        let { data: profile, error: profileError } = await supabase
+        let { data: profile, error: profileError } = await userClient
             .from('profiles')
             .select('role, full_name, avatar_url')
             .eq('id', data.user.id)
@@ -94,7 +107,7 @@ export const login = async (req: Request, res: Response) => {
         // Self-healing: Create profile if missing
         if (!profile) {
             console.log('Profile missing for user, creating one...');
-            const { data: newProfile, error: createError } = await supabase
+            const { data: newProfile, error: createError } = await userClient
                 .from('profiles')
                 .insert({
                     id: data.user.id,
@@ -116,7 +129,7 @@ export const login = async (req: Request, res: Response) => {
         // Sync: If Auth Metadata says admin, but Profile doesn't, trust Auth and update Profile
         if (data.user.user_metadata?.role === 'admin' && profile?.role !== 'admin') {
             console.log('Syncing Admin role from Auth to Profile...');
-            const { data: updatedProfile, error: syncError } = await supabase
+            const { data: updatedProfile, error: syncError } = await userClient
                 .from('profiles')
                 .update({ role: 'admin' })
                 .eq('id', data.user.id)

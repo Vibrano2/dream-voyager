@@ -1,8 +1,10 @@
+import dotenv from 'dotenv'; // Restore import for usage below
+dotenv.config(); // Run immediately
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv'; // Removed manual import
 import bookingsRouter from './routes/bookings.js';
 import paymentsRouter from './routes/payments.js';
 import packagesRouter from './routes/packages.js';
@@ -27,6 +29,7 @@ app.use(cors({
     origin: function (origin, callback) {
         const allowedOrigins = [
             'http://localhost:5173',
+            'http://localhost:5175', // Added for fallback port
             'https://dream-voyager.vercel.app',
             'https://dreamvoyagerg.com',
             'https://www.dreamvoyagerg.com',

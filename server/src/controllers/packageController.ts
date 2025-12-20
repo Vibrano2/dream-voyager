@@ -65,9 +65,25 @@ export const createPackage = async (req: Request, res: Response) => {
         // Use User Context for RLS (Fixes Service Key missing issue on Prod)
         // We create a new client that "acts as" the user making the request.
         const token = req.headers.authorization?.split(' ')[1];
+
+        // Debugging Env Vars
+        const supabaseUrl = process.env.SUPABASE_URL;
+        const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
+
+        if (!supabaseUrl || !supabaseAnonKey) {
+            console.error('[Create Package] CRITICAL: Missing Supabase Env Vars');
+            console.error('URL:', supabaseUrl ? 'Present' : 'Missing');
+            console.error('Key:', supabaseAnonKey ? 'Present' : 'Missing');
+            // Check if key is too short (bad placeholder)
+            if (supabaseAnonKey && supabaseAnonKey.length < 20) {
+                console.error('Key looks like placeholder or invalid:', supabaseAnonKey);
+            }
+            return res.status(500).json({ error: 'Server misconfiguration: Missing API Keys' });
+        }
+
         const userClient = createClient(
-            process.env.SUPABASE_URL!,
-            process.env.SUPABASE_ANON_KEY!,
+            supabaseUrl,
+            supabaseAnonKey,
             { global: { headers: { Authorization: `Bearer ${token}` } } }
         );
 
@@ -98,9 +114,19 @@ export const updatePackage = async (req: Request, res: Response) => {
 
         // Use User Context for RLS
         const token = req.headers.authorization?.split(' ')[1];
+
+        // Debugging Env Vars
+        const supabaseUrl = process.env.SUPABASE_URL;
+        const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
+
+        if (!supabaseUrl || !supabaseAnonKey) {
+            console.error('[Update Package] CRITICAL: Missing Supabase Env Vars');
+            return res.status(500).json({ error: 'Server misconfiguration: Missing API Keys' });
+        }
+
         const userClient = createClient(
-            process.env.SUPABASE_URL!,
-            process.env.SUPABASE_ANON_KEY!,
+            supabaseUrl,
+            supabaseAnonKey,
             { global: { headers: { Authorization: `Bearer ${token}` } } }
         );
 

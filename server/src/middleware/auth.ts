@@ -37,13 +37,21 @@ export const requireRole = (allowedRoles: string[]) => {
             return res.status(401).json({ error: 'User not authenticated' });
         }
 
-        // STRICT SECURITY: Always verify against the database.
-        // We Use a User-Scoped Client to ensure we are acting AS the user (RLS compatible).
-        // This avoids issues if the Server Service Key is missing/invalid.
+        // Use User Context for RLS (Fixes Service Key missing issue on Prod)
+        // We create a new client that "acts as" the user making the request.
         const token = req.headers.authorization?.split(' ')[1];
+
+        const supabaseUrl = process.env.SUPABASE_URL;
+        const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
+
+        if (!supabaseUrl || !supabaseAnonKey) {
+            console.error('[Auth Middleware] CRITICAL: Missing Supabase Env Vars');
+            return res.status(500).json({ error: 'Server misconfiguration: Missing API Keys' });
+        }
+
         const userClient = createClient(
-            process.env.SUPABASE_URL!,
-            process.env.SUPABASE_ANON_KEY!,
+            supabaseUrl,
+            supabaseAnonKey,
             { global: { headers: { Authorization: `Bearer ${token}` } } }
         );
 
