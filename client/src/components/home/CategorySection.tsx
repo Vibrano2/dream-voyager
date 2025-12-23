@@ -25,12 +25,34 @@ interface CategorySectionProps {
     id?: string;
 }
 
+const getResponsiveImageUrl = (url: string, width: number) => {
+    try {
+        if (url.includes('images.unsplash.com')) {
+            const urlObj = new URL(url);
+            urlObj.searchParams.set('w', width.toString());
+            urlObj.searchParams.set('q', '80');
+            urlObj.searchParams.set('auto', 'format');
+            return urlObj.toString();
+        }
+        return url;
+    } catch {
+        return url;
+    }
+};
+
 const PackageCard = ({ pkg }: PackageCardProps) => (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 group cursor-pointer border border-slate-100/50 backdrop-blur-sm">
         <div className="relative h-56 overflow-hidden">
             <img
-                src={pkg.image}
+                src={getResponsiveImageUrl(pkg.image, 600)}
+                srcSet={`
+                    ${getResponsiveImageUrl(pkg.image, 400)} 400w,
+                    ${getResponsiveImageUrl(pkg.image, 600)} 600w,
+                    ${getResponsiveImageUrl(pkg.image, 800)} 800w
+                `}
+                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 300px"
                 alt={pkg.title}
+                loading="lazy"
                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

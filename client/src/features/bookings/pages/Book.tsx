@@ -9,7 +9,7 @@ const Book = () => {
         packagePrice?: number;
         packageImage?: string;
         packageLocation?: string;
-        bookingType?: 'package' | 'flight' | 'visa' | 'study-visa';
+        bookingType?: 'package' | 'flight' | 'visa' | 'study-visa' | 'consultation';
     } | null;
 
     if (!state) {

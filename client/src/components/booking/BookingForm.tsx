@@ -10,7 +10,7 @@ interface BookingFormProps {
     packagePrice: number;
     packageImage?: string;
     packageLocation?: string;
-    bookingType?: 'package' | 'flight' | 'visa' | 'study-visa' | 'custom';
+    bookingType?: 'package' | 'flight' | 'visa' | 'study-visa' | 'custom' | 'consultation';
 }
 
 interface PassengerDetail {
@@ -69,16 +69,18 @@ const BookingForm = ({ packageId, packageTitle, packagePrice, packageImage, pack
 
         try {
             // Validate passengers
-            const invalidPassenger = passengers.find(p => !p.name || p.age <= 0);
-            if (invalidPassenger) {
-                setError('Please fill in all passenger details');
-                setLoading(false);
-                return;
+            if (bookingType !== 'consultation') {
+                const invalidPassenger = passengers.find(p => !p.name || p.age <= 0);
+                if (invalidPassenger) {
+                    setError('Please fill in all passenger details');
+                    setLoading(false);
+                    return;
+                }
             }
 
             // Create booking payload
             const bookingPayload: any = {
-                passengers: formData.numberOfTravelers,
+                passengers: bookingType === 'consultation' ? 1 : formData.numberOfTravelers,
                 travel_date: formData.travelDate,
                 passenger_details: passengers,
                 special_requests: formData.specialRequests,
@@ -98,8 +100,13 @@ const BookingForm = ({ packageId, packageTitle, packagePrice, packageImage, pack
             const response = await api.post('/bookings', bookingPayload);
 
             if (response.data.success) {
-                // Redirect to payment page
-                navigate(`/payment/${response.data.booking.id}`);
+                if (bookingType === 'consultation') {
+                    // Redirect to confirmation directly for free consultations
+                    navigate(`/booking/confirm/${response.data.booking.id}`);
+                } else {
+                    // Redirect to payment page
+                    navigate(`/payment/${response.data.booking.id}`);
+                }
             }
         } catch (err: any) {
             setError(err.response?.data?.error || 'Failed to create booking. Please try again.');
@@ -140,69 +147,73 @@ const BookingForm = ({ packageId, packageTitle, packagePrice, packageImage, pack
                                 </div>
 
                                 {/* Number of Travelers */}
-                                <div>
-                                    <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-                                        <Users size={18} />
-                                        Number of Travelers
-                                    </label>
-                                    <select
-                                        value={formData.numberOfTravelers}
-                                        onChange={(e) => handleTravelerCountChange(parseInt(e.target.value))}
-                                        className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    >
-                                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
-                                            <option key={num} value={num}>{num} {num === 1 ? 'Person' : 'People'}</option>
-                                        ))}
-                                    </select>
-                                </div>
+                                {bookingType !== 'consultation' && (
+                                    <div>
+                                        <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
+                                            <Users size={18} />
+                                            Number of Travelers
+                                        </label>
+                                        <select
+                                            value={formData.numberOfTravelers}
+                                            onChange={(e) => handleTravelerCountChange(parseInt(e.target.value))}
+                                            className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        >
+                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
+                                                <option key={num} value={num}>{num} {num === 1 ? 'Person' : 'People'}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                )}
 
                                 {/* Passenger Details */}
-                                <div className="border-t border-slate-200 pt-6">
-                                    <h3 className="text-lg font-semibold text-slate-800 mb-4">Passenger Details</h3>
-                                    <div className="space-y-4">
-                                        {passengers.map((passenger, index) => (
-                                            <div key={index} className="bg-slate-50 p-4 rounded-lg space-y-3">
-                                                <h4 className="font-medium text-slate-700">Passenger {index + 1}</h4>
-                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                                    <div>
-                                                        <label className="block text-xs text-slate-600 mb-1">Full Name</label>
-                                                        <input
-                                                            type="text"
-                                                            required
-                                                            value={passenger.name}
-                                                            onChange={(e) => handlePassengerChange(index, 'name', e.target.value)}
-                                                            placeholder="John Doe"
-                                                            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <label className="block text-xs text-slate-600 mb-1">Age</label>
-                                                        <input
-                                                            type="number"
-                                                            required
-                                                            min="1"
-                                                            max="120"
-                                                            value={passenger.age || ''}
-                                                            onChange={(e) => handlePassengerChange(index, 'age', parseInt(e.target.value))}
-                                                            placeholder="25"
-                                                            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <label className="block text-xs text-slate-600 mb-1">Passport No. (Optional)</label>
-                                                        <input
-                                                            type="text"
-                                                            value={passenger.passport}
-                                                            onChange={(e) => handlePassengerChange(index, 'passport', e.target.value)}
-                                                            placeholder="A12345678"
-                                                            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                        />
+                                {bookingType !== 'consultation' && (
+                                    <div className="border-t border-slate-200 pt-6">
+                                        <h3 className="text-lg font-semibold text-slate-800 mb-4">Passenger Details</h3>
+                                        <div className="space-y-4">
+                                            {passengers.map((passenger, index) => (
+                                                <div key={index} className="bg-slate-50 p-4 rounded-lg space-y-3">
+                                                    <h4 className="font-medium text-slate-700">Passenger {index + 1}</h4>
+                                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                        <div>
+                                                            <label className="block text-xs text-slate-600 mb-1">Full Name</label>
+                                                            <input
+                                                                type="text"
+                                                                required
+                                                                value={passenger.name}
+                                                                onChange={(e) => handlePassengerChange(index, 'name', e.target.value)}
+                                                                placeholder="John Doe"
+                                                                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-xs text-slate-600 mb-1">Age</label>
+                                                            <input
+                                                                type="number"
+                                                                required
+                                                                min="1"
+                                                                max="120"
+                                                                value={passenger.age || ''}
+                                                                onChange={(e) => handlePassengerChange(index, 'age', parseInt(e.target.value))}
+                                                                placeholder="25"
+                                                                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-xs text-slate-600 mb-1">Passport No. (Optional)</label>
+                                                            <input
+                                                                type="text"
+                                                                value={passenger.passport}
+                                                                onChange={(e) => handlePassengerChange(index, 'passport', e.target.value)}
+                                                                placeholder="A12345678"
+                                                                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                            />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
+                                )}
 
                                 {/* Contact Information */}
                                 <div className="border-t border-slate-200 pt-6">
@@ -264,7 +275,7 @@ const BookingForm = ({ packageId, packageTitle, packagePrice, packageImage, pack
                                     ) : (
                                         <>
                                             <CreditCard size={20} />
-                                            Proceed to Payment
+                                            {bookingType === 'consultation' ? 'Schedule Consultation' : 'Proceed to Payment'}
                                         </>
                                     )}
                                 </button>
@@ -300,22 +311,33 @@ const BookingForm = ({ packageId, packageTitle, packagePrice, packageImage, pack
                                 </div>
                                 <div>
                                     <p className="text-sm text-slate-500">Travelers</p>
-                                    <p className="font-medium text-slate-700">{formData.numberOfTravelers} {formData.numberOfTravelers === 1 ? 'Person' : 'People'}</p>
+                                    <p className="font-medium text-slate-700">{bookingType === 'consultation' ? '1 Person' : `${formData.numberOfTravelers} ${formData.numberOfTravelers === 1 ? 'Person' : 'People'}`}</p>
                                 </div>
                             </div>
 
                             <div className="border-t border-slate-200 pt-4 space-y-2">
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-slate-600">Price per person</span>
-                                    <span className="font-medium">₦{packagePrice.toLocaleString()}</span>
-                                </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-slate-600">Number of travelers</span>
-                                    <span className="font-medium">× {formData.numberOfTravelers}</span>
-                                </div>
+                                {bookingType !== 'consultation' ? (
+                                    <>
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-slate-600">Price per person</span>
+                                            <span className="font-medium">₦{packagePrice.toLocaleString()}</span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-slate-600">Number of travelers</span>
+                                            <span className="font-medium">× {formData.numberOfTravelers}</span>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-slate-600">Consultation Fee</span>
+                                        <span className="font-medium text-green-600">Free</span>
+                                    </div>
+                                )}
                                 <div className="flex justify-between text-lg font-bold text-slate-800 pt-2 border-t border-slate-200">
                                     <span>Total Amount</span>
-                                    <span className="text-blue-600">₦{calculateTotal().toLocaleString()}</span>
+                                    <span className="text-blue-600">
+                                        {bookingType === 'consultation' ? 'Free' : `₦${calculateTotal().toLocaleString()}`}
+                                    </span>
                                 </div>
                             </div>
 

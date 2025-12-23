@@ -84,7 +84,17 @@ const Services = () => {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
 
 
-                        <Link to="/book" className="btn-accent text-lg px-8 flex items-center justify-center">Book a Consultation</Link>
+                        <Link
+                            to="/book"
+                            state={{
+                                bookingType: 'consultation',
+                                packageTitle: 'Travel Consultation',
+                                packagePrice: 0
+                            }}
+                            className="btn-accent text-lg px-8 flex items-center justify-center"
+                        >
+                            Book a Consultation
+                        </Link>
                         <Link to="/support" className="px-8 py-3 rounded-full border border-white/20 hover:bg-white/10 transition-colors font-medium flex items-center justify-center">Contact Support</Link>
                     </div>
                 </div>
