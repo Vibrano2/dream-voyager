@@ -1,36 +1,27 @@
-
-import { createClient } from '@supabase/supabase-js';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
-
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+import supabase from '../src/config/supabase';
 
 async function checkSchema() {
-    console.log('--- Checking Packages Schema ---');
-    // Using a trick: Select one row (or empty) and looking at keys? 
-    // Or better, Supabase returns error on select of non-existent column?
-    // Actually, we can query information_schema if we have access via SQL?
-    // Via client is harder.
-    // Let's try to insert a dummy row with ALL fields and see which one fails?
-    // No, cleaner to just try to select * limit 1 and print keys.
+    console.log('Checking bookings table schema...');
 
-    const { data, error } = await supabase.from('packages').select('*').limit(1);
+    // Insert a dummy row to see if it accepts booking_type, or just check columns via select
+    // Since we can't easily query schema info from client, we will try to select * limit 1
+    const { data, error } = await supabase
+        .from('bookings')
+        .select('*')
+        .limit(1);
 
     if (error) {
-        console.error('Error fetching packages:', error);
-        return;
-    }
-
-    if (data && data.length > 0) {
-        console.log('Existing Columns:', Object.keys(data[0]));
+        console.error('Error selecting:', error);
     } else {
-        console.log('No data found, cannot infer schema easily via JS client.');
-        // Try creating with just one 'suspect' field to fail it
+        if (data && data.length > 0) {
+            console.log('Columns found:', Object.keys(data[0]));
+        } else {
+            console.log('No data found to infer columns.');
+            // Try to dummy insert with booking_type? No, safe to assume we can add it if missing?
+            // Actually, if we are in development, we can probably just assume we need to handle it.
+        }
     }
+    process.exit(0);
 }
 
 checkSchema();

@@ -56,8 +56,16 @@ const AdminBookings = () => {
                                     <div className="font-medium text-slate-900">{booking.profiles?.full_name || 'Unknown'}</div>
                                     <div className="text-xs text-slate-500">{booking.profiles?.email}</div>
                                 </td>
-                                <td className="px-6 py-4 text-slate-600">{booking.packages?.title}</td>
-                                <td className="px-6 py-4 font-medium text-slate-900">₦{booking.total_amount?.toLocaleString()}</td>
+                                <td className="px-6 py-4 text-slate-600">
+                                    {booking.packages?.title ||
+                                        (booking.booking_type === 'consultation' ? 'Travel Consultation' :
+                                            booking.booking_type === 'flight' ? 'Flight Booking' :
+                                                booking.booking_type === 'visa' ? 'Visa Assistance' :
+                                                    'Custom Booking')}
+                                </td>
+                                <td className="px-6 py-4 font-medium text-slate-900">
+                                    {booking.total_amount === 0 ? <span className="text-green-600">Free</span> : `₦${booking.total_amount?.toLocaleString()}`}
+                                </td>
                                 <td className="px-6 py-4">
                                     <select
                                         value={booking.status}

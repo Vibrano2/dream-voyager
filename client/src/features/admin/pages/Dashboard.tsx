@@ -19,16 +19,12 @@ const AdminDashboard = () => {
         try {
             // For now, use mock data if backend isn't fully ready or returns empty
             const res = await api.get('/admin/stats');
-            setStats(res.data.stats);
+            if (res.data.stats) {
+                setStats(res.data.stats);
+            }
         } catch (error) {
             console.error('Failed to fetch admin stats', error);
-            // Fallback Mock Data for demo
-            setStats({
-                totalBookings: 124,
-                totalUsers: 56,
-                activePackages: 12,
-                totalRevenue: 15400000
-            });
+            // Dont fail completely, just show zeros or partial data if possible
         } finally {
             setLoading(false);
         }

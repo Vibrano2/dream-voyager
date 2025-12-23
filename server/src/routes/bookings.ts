@@ -132,9 +132,9 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
 
             basePrice = packageData.price;
             totalAmount = basePrice * (passengers || 1);
-        } else if (custom_price) {
-            // For flights or custom bookings without a package
-            basePrice = custom_price;
+        } else if (custom_price || booking_type === 'consultation') {
+            // For flights or custom bookings without a package, or free consultations
+            basePrice = custom_price || 0;
             totalAmount = basePrice * (passengers || 1);
         } else {
             return res.status(400).json({ error: 'Either package_id or custom_price is required' });
@@ -176,7 +176,8 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
                     passenger_details: passenger_details || [],
                     special_requests: special_requests || null,
                     contact_email,
-                    contact_phone
+                    contact_phone,
+                    booking_type // Insert booking type
                 }
             ])
             .select(`
