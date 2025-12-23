@@ -34,6 +34,7 @@ import AdminPackages from './features/admin/pages/Packages';
 import AdminUsers from './features/admin/pages/Users';
 import AdminSettings from './features/admin/pages/Settings';
 import Support from './pages/Support';
+import Insurance from './pages/Insurance';
 import Privacy from './pages/legal/Privacy';
 import Terms from './pages/legal/Terms';
 import Cookies from './pages/legal/Cookies';
@@ -76,10 +77,11 @@ function App() {
                 <Route path="/hotels" element={<Hotels />} />
                 <Route path="/honeymoon" element={<Honeymoon />} />
                 <Route path="/corporate" element={<Corporate />} />
-                <Route path="/corporate" element={<Corporate />} />
+
                 <Route path="/about" element={<About />} />
                 <Route path="/book" element={<Book />} />
                 <Route path="/support" element={<Support />} />
+                <Route path="/insurance" element={<Insurance />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/cookies" element={<Cookies />} />

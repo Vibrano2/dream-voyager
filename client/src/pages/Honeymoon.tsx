@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Heart, MapPin, Calendar, ArrowRight, Search, Star, Sparkles, Wine, Palmtree } from 'lucide-react';
 
 interface HoneymoonPackage {
@@ -93,11 +94,50 @@ const honeymoonPackages: HoneymoonPackage[] = [
 ];
 
 const Honeymoon = () => {
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useState({
         destination: '',
         duration: '',
         budget: '',
         travelers: 2
+    });
+
+    const handleBook = (pkg: HoneymoonPackage) => {
+        // Navigate to booking page with package details
+        navigate('/book', {
+            state: {
+                type: 'package',
+                packageData: {
+                    id: `mock-${pkg.id}`, // Mock ID since these aren't in DB yet
+                    title: pkg.title,
+                    price: parseInt(pkg.price.replace(/[^0-9]/g, '')),
+                    description: pkg.description
+                }
+            }
+        });
+    };
+
+    const filteredPackages = honeymoonPackages.filter(pkg => {
+        const matchDest = pkg.destination.toLowerCase().includes(searchParams.destination.toLowerCase()) ||
+            pkg.title.toLowerCase().includes(searchParams.destination.toLowerCase());
+
+        let matchDuration = true;
+        if (searchParams.duration) {
+            const days = parseInt(pkg.duration);
+            if (searchParams.duration === '3-5') matchDuration = days >= 3 && days <= 5;
+            if (searchParams.duration === '5-7') matchDuration = days >= 5 && days <= 7;
+            if (searchParams.duration === '7+') matchDuration = days > 7;
+        }
+
+        let matchBudget = true;
+        if (searchParams.budget) {
+            const price = parseInt(pkg.price.replace(/[^0-9]/g, ''));
+            if (searchParams.budget === 'budget') matchBudget = price < 2000000;
+            if (searchParams.budget === 'mid') matchBudget = price >= 2000000 && price <= 4000000;
+            if (searchParams.budget === 'luxury') matchBudget = price > 4000000;
+        }
+
+        return matchDest && matchDuration && matchBudget;
     });
 
     return (
@@ -200,75 +240,84 @@ const Honeymoon = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {honeymoonPackages.map((pkg) => (
-                        <div key={pkg.id} className="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
-                            <div className="relative h-64 overflow-hidden">
-                                <img
-                                    src={pkg.image}
-                                    alt={pkg.title}
-                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                    {filteredPackages.length > 0 ? (
+                        filteredPackages.map((pkg) => (
+                            <div key={pkg.id} className="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 group">
+                                <div className="relative h-64 overflow-hidden">
+                                    <img
+                                        src={pkg.image}
+                                        alt={pkg.title}
+                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
 
-                                {pkg.featured && (
-                                    <div className="absolute top-4 left-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-1.5">
-                                        <Heart size={14} className="fill-current" />
-                                        Most Popular
+                                    {pkg.featured && (
+                                        <div className="absolute top-4 left-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-1.5">
+                                            <Heart size={14} className="fill-current" />
+                                            Most Popular
+                                        </div>
+                                    )}
+
+                                    <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+                                        <Star size={16} className="text-pink-500 fill-current" />
+                                        <span className="font-bold text-slate-900">{pkg.rating}</span>
+                                        <span className="text-slate-500 text-sm">({pkg.reviews})</span>
                                     </div>
-                                )}
 
-                                <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
-                                    <Star size={16} className="text-pink-500 fill-current" />
-                                    <span className="font-bold text-slate-900">{pkg.rating}</span>
-                                    <span className="text-slate-500 text-sm">({pkg.reviews})</span>
+                                    <div className="absolute bottom-4 left-4 right-4">
+                                        <h3 className="font-heading text-2xl font-bold text-white mb-1">{pkg.title}</h3>
+                                        <p className="text-white/90 flex items-center gap-1 text-sm">
+                                            <MapPin size={14} />
+                                            {pkg.destination}
+                                        </p>
+                                    </div>
                                 </div>
 
-                                <div className="absolute bottom-4 left-4 right-4">
-                                    <h3 className="font-heading text-2xl font-bold text-white mb-1">{pkg.title}</h3>
-                                    <p className="text-white/90 flex items-center gap-1 text-sm">
-                                        <MapPin size={14} />
-                                        {pkg.destination}
-                                    </p>
+                                <div className="p-6">
+                                    <p className="text-slate-600 mb-4 line-clamp-2">{pkg.description}</p>
+
+                                    <div className="flex items-center gap-2 text-sm text-slate-600 mb-4">
+                                        <Calendar size={16} className="text-pink-500" />
+                                        <span>{pkg.duration}</span>
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <p className="text-xs font-semibold text-slate-500 mb-2">Package Includes:</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {pkg.includes.slice(0, 3).map((item, idx) => (
+                                                <span key={idx} className="text-xs bg-pink-50 text-pink-700 px-2 py-1 rounded-full">
+                                                    {item}
+                                                </span>
+                                            ))}
+                                            {pkg.includes.length > 3 && (
+                                                <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-full">
+                                                    +{pkg.includes.length - 3} more
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                                        <div>
+                                            <p className="text-xs text-slate-500 mb-1">Starting from</p>
+                                            <p className="text-2xl font-bold text-slate-900">{pkg.price}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => handleBook(pkg)}
+                                            className="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full font-semibold hover:from-pink-600 hover:to-rose-600 transition-all shadow-lg hover:shadow-xl flex items-center gap-2 group-hover:scale-105"
+                                        >
+                                            Book Now
+                                            <ArrowRight size={18} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div className="p-6">
-                                <p className="text-slate-600 mb-4 line-clamp-2">{pkg.description}</p>
-
-                                <div className="flex items-center gap-2 text-sm text-slate-600 mb-4">
-                                    <Calendar size={16} className="text-pink-500" />
-                                    <span>{pkg.duration}</span>
-                                </div>
-
-                                <div className="mb-4">
-                                    <p className="text-xs font-semibold text-slate-500 mb-2">Package Includes:</p>
-                                    <div className="flex flex-wrap gap-2">
-                                        {pkg.includes.slice(0, 3).map((item, idx) => (
-                                            <span key={idx} className="text-xs bg-pink-50 text-pink-700 px-2 py-1 rounded-full">
-                                                {item}
-                                            </span>
-                                        ))}
-                                        {pkg.includes.length > 3 && (
-                                            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-full">
-                                                +{pkg.includes.length - 3} more
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                                    <div>
-                                        <p className="text-xs text-slate-500 mb-1">Starting from</p>
-                                        <p className="text-2xl font-bold text-slate-900">{pkg.price}</p>
-                                    </div>
-                                    <button className="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full font-semibold hover:from-pink-600 hover:to-rose-600 transition-all shadow-lg hover:shadow-xl flex items-center gap-2 group-hover:scale-105">
-                                        Book Now
-                                        <ArrowRight size={18} />
-                                    </button>
-                                </div>
-                            </div>
+                        ))
+                    ) : (
+                        <div className="col-span-full text-center py-12">
+                            <p className="text-slate-500 text-lg">No honeymoon packages found matching your criteria.</p>
                         </div>
-                    ))}
+                    )}
                 </div>
             </div>
 

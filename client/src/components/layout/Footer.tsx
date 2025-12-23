@@ -89,6 +89,7 @@ const Footer = () => {
                                     Corporate Travel
                                 </Link>
                             </li>
+
                             <li>
                                 <Link to="/insurance" className="text-gray-300 hover:text-brand-skyblue transition-colors text-sm">
                                     Travel Insurance

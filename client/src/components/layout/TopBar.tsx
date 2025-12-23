@@ -124,7 +124,9 @@ const TopBar = () => {
                             { label: t('nav.studyVisa'), path: '/study-visa' },
                             { label: t('nav.hotels'), path: '/hotels' },
                             { label: t('nav.packages'), path: '/packages' },
-                            { label: t('nav.about'), path: '/about' }
+                            { label: t('nav.about'), path: '/about' },
+                            { label: 'Corporate', path: '/corporate' },
+                            { label: 'Services', path: '/services' }
                         ].map((item) => (
                             <Link
                                 key={item.label}
@@ -187,7 +189,9 @@ const TopBar = () => {
                         { label: t('nav.studyVisa'), path: '/study-visa' },
                         { label: t('nav.hotels'), path: '/hotels' },
                         { label: t('nav.packages'), path: '/packages' },
-                        { label: t('nav.about'), path: '/about' }
+                        { label: t('nav.about'), path: '/about' },
+                        { label: 'Corporate', path: '/corporate' },
+                        { label: 'Services', path: '/services' }
                     ].map((item) => (
                         <Link
                             key={item.label}

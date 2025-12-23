@@ -45,10 +45,25 @@ const Corporate = () => {
         message: ''
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle form submission
-        console.log('Form submitted:', formData);
+        try {
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Mock API delay
+            // TODO: Implement actual backend endpoint for corporate inquiries
+            // await api.post('/corporate/inquiry', formData); 
+            alert('Thank you for your interest! Our corporate travel team will contact you shortly.');
+            setFormData({
+                companyName: '',
+                contactPerson: '',
+                email: '',
+                phone: '',
+                employees: '',
+                message: ''
+            });
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            alert('Something went wrong. Please try again.');
+        }
     };
 
     return (
