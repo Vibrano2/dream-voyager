@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Globe, FileText, CheckCircle2, ArrowRight, MapPin, Clock, DollarSign, AlertCircle } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Globe, FileText, CheckCircle2, ArrowRight, Clock, DollarSign, AlertCircle } from 'lucide-react';
 
 interface VisaRequirement {
     item: string;
@@ -278,7 +278,7 @@ const Visa = () => {
                                         <ArrowRight size={22} />
                                     </button>
                                     <button className="px-8 py-4 rounded-full border-2 border-slate-200 hover:border-[#F49129] transition-colors font-semibold text-slate-700 hover:text-[#F49129]">
-                                        Contact Support
+                                        <Link to="/support" className="w-full btn-outline flex items-center justify-center mt-4">Contact Support</Link>
                                     </button>
                                 </div>
                             </div>

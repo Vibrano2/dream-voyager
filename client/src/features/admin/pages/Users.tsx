@@ -69,13 +69,7 @@ const AdminUsers = () => {
         }
     };
 
-    const getRoleIcon = (role: string) => {
-        switch (role) {
-            case 'admin': return Shield;
-            case 'agent': return User;
-            default: return User;
-        }
-    };
+
 
     if (loading) return <div>Loading users...</div>;
 
@@ -157,7 +151,7 @@ const AdminUsers = () => {
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {filteredUsers.map((user) => {
-                                const RoleIcon = getRoleIcon(user.role);
+                                // const RoleIcon = getRoleIcon(user.role);
                                 return (
                                     <tr key={user.id} className="hover:bg-slate-50 transition-colors">
                                         <td className="px-6 py-4">

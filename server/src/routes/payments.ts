@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { requireAuth } from '../middleware/auth.js';
 import { initializePayment, verifyPayment, generatePaymentReference, ngnToKobo } from '../services/paystack.js';
 import supabase from '../config/supabase.js';
+import { sendBookingConfirmation } from '../services/emailService.js';
 
 const router = express.Router();
 
@@ -108,12 +109,30 @@ router.get('/verify/:reference', requireAuth, async (req: Request, res: Response
             return res.status(500).json({ error: 'Failed to update payment status' });
         }
 
-        // If payment successful, update booking status
+
+
+        // ... (inside verify route)
+
+        // If payment successful, update booking status and send email
         if (paymentData.status === 'success') {
-            await supabase
+            const { data: booking } = await supabase
                 .from('bookings')
                 .update({ status: 'PAID' })
-                .eq('id', payment.booking_id);
+                .eq('id', payment.booking_id)
+                .select('*, packages:package_id(title)')
+                .single();
+
+            if (booking) {
+                // Send confirmation email
+                await sendBookingConfirmation(req.user!.email, {
+                    id: booking.id,
+                    booking_reference: booking.booking_reference,
+                    package_title: booking.packages?.title,
+                    travel_date: new Date(booking.travel_date).toDateString(),
+                    passengers: booking.passengers,
+                    total_amount: booking.total_amount
+                });
+            }
         }
 
         res.status(200).json({
@@ -160,12 +179,24 @@ router.post('/webhook', async (req: Request, res: Response) => {
 
             if (payment) {
                 // Update booking status
-                await supabase
+                const { data: booking } = await supabase
                     .from('bookings')
                     .update({ status: 'PAID' })
-                    .eq('id', payment.booking_id);
+                    .eq('id', payment.booking_id)
+                    .select('*, packages:package_id(title), profiles:user_id(email)')
+                    .single();
 
-                // TODO: Send confirmation email
+                // Send confirmation email
+                if (booking && booking.profiles?.email) {
+                    await sendBookingConfirmation(booking.profiles.email, {
+                        id: booking.id,
+                        booking_reference: booking.booking_reference,
+                        package_title: booking.packages?.title,
+                        travel_date: new Date(booking.travel_date).toDateString(),
+                        passengers: booking.passengers,
+                        total_amount: booking.total_amount
+                    });
+                }
             }
         }
 

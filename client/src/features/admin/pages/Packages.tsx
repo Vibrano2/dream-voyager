@@ -9,7 +9,6 @@ interface Package {
     destination: string;
     location: string;
     duration: number;
-    duration: number;
     price: number;
     category: string;
     image_url?: string;
@@ -28,13 +27,11 @@ const AdminPackages = () => {
     const [showModal, setShowModal] = useState(false);
     const [editingPackage, setEditingPackage] = useState<Package | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string>('');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const [formData, setFormData] = useState({
         title: '',
-        description: '',
         description: '',
         location: '',
         duration: 0,
@@ -92,7 +89,7 @@ const AdminPackages = () => {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            setImageFile(file);
+            // setImageFile(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImagePreview(reader.result as string);
@@ -151,13 +148,11 @@ const AdminPackages = () => {
             });
             setImagePreview('');
         }
-        setImageFile(null);
         setShowModal(true);
     };
 
     const closeModal = () => {
         setShowModal(false);
-        setImageFile(null);
         setImagePreview('');
         setEditingPackage(null);
     };
@@ -339,7 +334,7 @@ const AdminPackages = () => {
                                                 type="button"
                                                 onClick={() => {
                                                     setImagePreview('');
-                                                    setImageFile(null);
+                                                    // setImageFile(null);
                                                     if (fileInputRef.current) fileInputRef.current.value = '';
                                                 }}
                                                 className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"

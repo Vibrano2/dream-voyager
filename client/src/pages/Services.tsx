@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Plane, Map, Building2, GraduationCap, Ship, Briefcase, CheckCircle2 } from 'lucide-react';
 
 const services = [
@@ -81,8 +82,10 @@ const Services = () => {
                         Contact our travel experts today for a free consultation. We'll help you create the perfect itinerary for your budget and preferences.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button className="btn-accent text-lg px-8">Book a Consultation</button>
-                        <button className="px-8 py-3 rounded-full border border-white/20 hover:bg-white/10 transition-colors font-medium">Contact Support</button>
+
+
+                        <Link to="/book" className="btn-accent text-lg px-8 flex items-center justify-center">Book a Consultation</Link>
+                        <Link to="/support" className="px-8 py-3 rounded-full border border-white/20 hover:bg-white/10 transition-colors font-medium flex items-center justify-center">Contact Support</Link>
                     </div>
                 </div>
             </div>

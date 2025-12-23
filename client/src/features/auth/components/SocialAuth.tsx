@@ -3,8 +3,10 @@ import { supabase } from '../../../services/supabase';
 
 const SocialAuth = () => {
     const [loading, setLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
     const handleSocialLogin = async (provider: 'google' | 'facebook') => {
+        setErrorMsg(null);
         try {
             setLoading(true);
             const { error } = await supabase.auth.signInWithOAuth({
@@ -15,9 +17,9 @@ const SocialAuth = () => {
             });
 
             if (error) throw error;
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error logging in with social provider:', error);
-            alert('Error logging in with social provider');
+            setErrorMsg(error.message || 'Failed to initialize social login');
         } finally {
             setLoading(false);
         }
@@ -33,6 +35,12 @@ const SocialAuth = () => {
                     <span className="px-2 bg-white text-gray-500">Or continue with</span>
                 </div>
             </div>
+
+            {errorMsg && (
+                <div className="mt-4 bg-red-50 p-3 rounded-md border border-red-200 text-sm text-red-600">
+                    {errorMsg}
+                </div>
+            )}
 
             <div className="mt-6 grid grid-cols-2 gap-3">
                 <div>

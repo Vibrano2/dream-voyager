@@ -65,6 +65,11 @@ export const createPackage = async (req: Request, res: Response) => {
     try {
         const packageData = req.body;
 
+        // Default available to true if not provided
+        if (packageData.available === undefined) {
+            packageData.available = true;
+        }
+
         // Map frontend 'destination' to database 'location'
         if (packageData.destination && !packageData.location) {
             packageData.location = packageData.destination;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Heart, MapPin, Calendar, Users, ArrowRight, Search, Star, Sparkles, Wine, Palmtree } from 'lucide-react';
+import { Heart, MapPin, Calendar, ArrowRight, Search, Star, Sparkles, Wine, Palmtree } from 'lucide-react';
 
 interface HoneymoonPackage {
     id: number;

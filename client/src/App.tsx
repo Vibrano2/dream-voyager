@@ -23,6 +23,7 @@ import Honeymoon from './pages/Honeymoon';
 import Corporate from './pages/Corporate';
 import MyBookings from './features/bookings/pages/MyBookings';
 import Payment from './pages/Payment';
+import PaymentCallback from './pages/PaymentCallback';
 import BookingConfirmation from './features/bookings/pages/BookingConfirmation';
 import Book from './features/bookings/pages/Book';
 import AdminLayout from './features/admin/layouts/AdminLayout';
@@ -32,6 +33,10 @@ import AdminBookings from './features/admin/pages/Bookings';
 import AdminPackages from './features/admin/pages/Packages';
 import AdminUsers from './features/admin/pages/Users';
 import AdminSettings from './features/admin/pages/Settings';
+import Support from './pages/Support';
+import Privacy from './pages/legal/Privacy';
+import Terms from './pages/legal/Terms';
+import Cookies from './pages/legal/Cookies';
 
 function App() {
   return (
@@ -49,6 +54,7 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/my-bookings" element={<MyBookings />} />
                 <Route path="/payment/:bookingId" element={<Payment />} />
+                <Route path="/payment/callback" element={<PaymentCallback />} />
                 <Route path="/booking/confirm/:bookingId" element={<BookingConfirmation />} />
 
                 {/* Admin Routes */}
@@ -73,6 +79,10 @@ function App() {
                 <Route path="/corporate" element={<Corporate />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/book" element={<Book />} />
+                <Route path="/support" element={<Support />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/cookies" element={<Cookies />} />
               </Routes>
             </main>
             <Footer />

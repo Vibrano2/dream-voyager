@@ -6,7 +6,7 @@ import path from 'path';
 // Load environment variables
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'http://localhost:5000/api';
 
 async function runVerification() {
     const timestamp = Date.now();
@@ -17,20 +17,39 @@ async function runVerification() {
     console.log(`Target: ${API_URL}`);
 
     try {
-        // 1. Signup Temp Admin
-        console.log(`\n1. Registering Temp Admin: ${email}`);
-        try {
-            await axios.post(`${API_URL}/auth/signup`, {
-                email,
-                password,
-                fullName: 'Test Admin',
+        // 1. Signup Temp Admin via Supabase Admin API (to skip email confirmation)
+        console.log(`\n1. Registering Temp Admin (Pre-confirmed): ${email}`);
+
+        const { createClient } = await import('@supabase/supabase-js');
+        const supabaseAdmin = createClient(
+            process.env.SUPABASE_URL!,
+            process.env.SUPABASE_SERVICE_ROLE_KEY!
+        );
+
+        const { data: adminUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
+            email,
+            password,
+            email_confirm: true,
+            user_metadata: {
+                full_name: 'Test Admin',
                 phone: '1234567890',
-                role: 'admin' // Explicitly requesting admin role
-            });
-            console.log('   ✅ Signup successful');
-        } catch (error: any) {
-            console.log('   ⚠️ Signup failed:', error.response?.data || error.message);
+                role: 'admin'
+            }
+        });
+
+        if (createError) {
+            console.log('   ⚠️ Admin creation failed:', createError.message);
             console.log('   Proceeding to login (in case user exists)...');
+        } else {
+            // Create profile manually since auth trigger might not fire or we want to be sure
+            await supabaseAdmin.from('profiles').insert({
+                id: adminUser.user.id,
+                email: email,
+                full_name: 'Test Admin',
+                phone: '1234567890',
+                role: 'admin'
+            });
+            console.log('   ✅ Admin created & confirmed successfully');
         }
 
         // 2. Login
@@ -40,6 +59,9 @@ async function runVerification() {
             password
         });
         const { session, user } = loginRes.data;
+        if (!session) {
+            console.error('Session is missing in login response:', loginRes.data);
+        }
         const token = session.access_token;
         console.log(`   ✅ Login successful. Role: ${user.role}`);
 
@@ -56,11 +78,11 @@ async function runVerification() {
             description: 'This is a test package to verify RLS fixes.',
             price: 50000,
             duration: '5 Days',
-            imageUrl: 'https://example.com/image.jpg',
+            image_url: 'https://example.com/image.jpg',
             category: 'Honeymoon',
             location: 'Test City',
             available: true,
-            features: ['Test Feature 1', 'Test Feature 2']
+            // features: ['Test Feature 1', 'Test Feature 2'] // Column does not exist
         };
 
         const createRes = await axios.post(`${API_URL}/packages`, pkgData, {
@@ -79,7 +101,9 @@ async function runVerification() {
             console.error('Status:', error.response.status);
             console.error('Data:', error.response.data);
         } else {
-            console.error('Error:', error.message);
+            console.error('Error Message:', error.message);
+            console.error('Error Code:', error.code);
+            console.error('Error Stack:', error.stack);
         }
         process.exit(1);
     }

@@ -19,19 +19,19 @@ const Footer = () => {
                             Explore the world with confidence and style.
                         </p>
                         <div className="flex gap-3">
-                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+                            <a href="https://www.facebook.com/share/1CvQ3Lg7W8/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer"
                                 className="w-9 h-9 rounded-full bg-white/10 hover:bg-brand-skyblue flex items-center justify-center transition-colors">
                                 <Facebook size={18} />
                             </a>
-                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+                            <a href="https://www.instagram.com/dreamvoyagerg?igsh=OXZlNW9xcHd3OGJ4&utm_source=qr" target="_blank" rel="noopener noreferrer"
                                 className="w-9 h-9 rounded-full bg-white/10 hover:bg-brand-orange flex items-center justify-center transition-colors">
                                 <Instagram size={18} />
                             </a>
-                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+                            <a href="https://twitter.com/dreamvoyager" target="_blank" rel="noopener noreferrer"
                                 className="w-9 h-9 rounded-full bg-white/10 hover:bg-brand-skyblue flex items-center justify-center transition-colors">
                                 <Twitter size={18} />
                             </a>
-                            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+                            <a href="https://linkedin.com/company/dreamvoyager" target="_blank" rel="noopener noreferrer"
                                 className="w-9 h-9 rounded-full bg-white/10 hover:bg-brand-skyblue flex items-center justify-center transition-colors">
                                 <Linkedin size={18} />
                             </a>

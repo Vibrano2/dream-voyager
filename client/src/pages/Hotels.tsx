@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Building2, Calendar, Users, MapPin, ArrowRight, Search, Star, Wifi, Coffee, Dumbbell, Check, X, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Building2, Calendar, Users, MapPin, ArrowRight, Search, Star, Wifi, Check, X, CheckCircle2, AlertCircle } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../features/auth/context/AuthContext';
 
