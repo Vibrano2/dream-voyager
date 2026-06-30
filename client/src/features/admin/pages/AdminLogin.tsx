@@ -21,8 +21,6 @@ const AdminLogin = () => {
             const response = await api.post('/auth/login', { email, password });
             const { session, user } = response.data;
 
-            console.log('Login response:', user); // Debug log
-
             // The backend returns role in user.profile.role OR user.user_metadata.role
             const userRole = user.profile?.role || user.user_metadata?.role || user.role;
 

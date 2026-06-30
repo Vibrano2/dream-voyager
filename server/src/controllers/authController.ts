@@ -106,7 +106,6 @@ export const login = async (req: Request, res: Response) => {
 
         // Self-healing: Create profile if missing
         if (!profile) {
-            console.log('Profile missing for user, creating one...');
             const { data: newProfile, error: createError } = await userClient
                 .from('profiles')
                 .insert({
@@ -128,7 +127,6 @@ export const login = async (req: Request, res: Response) => {
 
         // Sync: If Auth Metadata says admin, but Profile doesn't, trust Auth and update Profile
         if (data.user.user_metadata?.role === 'admin' && profile?.role !== 'admin') {
-            console.log('Syncing Admin role from Auth to Profile...');
             const { data: updatedProfile, error: syncError } = await userClient
                 .from('profiles')
                 .update({ role: 'admin' })

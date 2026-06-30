@@ -20,7 +20,6 @@ const Login = () => {
         setLoading(true);
 
         try {
-            console.log('Sending login request to:', api.getUri());
             const response = await api.post('/auth/login', { email, password });
             const { session, user } = response.data;
 

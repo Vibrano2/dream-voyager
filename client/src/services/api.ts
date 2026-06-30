@@ -7,20 +7,17 @@ const getApiUrl = () => {
 
     // If environment variable exists and IS NOT the placeholder, use it
     if (envUrl && envUrl !== 'https://your-production-api.com/api') {
-        console.log('Using API URL from environment:', envUrl);
         return envUrl;
     }
 
     // Smart Localhost Detection
     // If we are on localhost, almost always want the local server (unless valid env var is set)
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        console.log('Detected localhost: Using local API URL');
         return 'http://localhost:5000/api';
     }
 
     // Production fallback - hardcoded for reliability
     if (import.meta.env.PROD) {
-        console.log('Production mode: Using hardcoded API URL');
         return 'https://dream-voyager-api.onrender.com/api';
     }
 

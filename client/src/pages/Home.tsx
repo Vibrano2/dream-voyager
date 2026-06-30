@@ -17,7 +17,7 @@ const dubaispecials = [
         location: "Dubai Marina",
         duration: "3 Days / 2 Nights",
         rating: 4.7,
-        image: "https://images.unsplash.com/photo-1518684079-3c830dcef6c0?auto=format&fit=crop&q=80&w=800",
+        image: "https://images.unsplash.com/photo-1722502831583-b4e93ecc6027?auto=format&fit=crop&q=80&w=800",
         price: "₦850,000",
         description: "Sunset yacht cruise with dinner and transfers included.",
         featured: false
@@ -27,7 +27,7 @@ const dubaispecials = [
         location: "Dubai Desert",
         duration: "4 Days / 3 Nights",
         rating: 4.8,
-        image: "https://images.unsplash.com/photo-1451337516015-6b6fcd53e5af?auto=format&fit=crop&q=80&w=800",
+        image: "https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&q=80&w=800",
         price: "₦950,000",
         description: "Dune bashing, camel riding, and BBQ dinner under the stars.",
         featured: false
@@ -37,7 +37,7 @@ const dubaispecials = [
         location: "Sheikh Zayed Road",
         duration: "5 Days / 4 Nights",
         rating: 4.6,
-        image: "https://images.unsplash.com/photo-1512453979798-5ea936a7fe48?auto=format&fit=crop&q=80&w=800",
+        image: "https://images.unsplash.com/photo-1686918269961-507270a5a238?auto=format&fit=crop&q=80&w=800",
         price: "₦1,200,000",
         description: "Visit the most beautiful building on earth and explore future tech.",
         featured: false

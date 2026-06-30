@@ -93,11 +93,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     setUser(normalizeUser(response.data.user));
                 } catch (e) {
                     // Profile might not exist if user just signed up via OAuth
-                    // We might need to create it?
-                    console.log('OAuth user detected, syncing profile...');
-                    // If /auth/me fails, it implies backend doesn't know this user nicely, 
-                    // OR the token style is different.
-                    // Supabase tokens ARE JWTs so they should work if secret is same.
                 }
             } else if (event === 'SIGNED_OUT') {
                 logout();
