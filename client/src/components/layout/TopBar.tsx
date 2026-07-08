@@ -147,11 +147,11 @@ const TopBar = () => {
                                 <Link to="/my-bookings" className="text-sm font-medium text-slate-700 hover:text-blue-600 transition-colors">
                                     {t('nav.myBookings')}
                                 </Link>
-                                <Link to="/dashboard" className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-brand-skyblue">
+                                <Link to={user?.role === 'admin' ? '/admin' : '/dashboard'} className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-brand-skyblue">
                                     <div className="w-8 h-8 rounded-full bg-brand-pale-aqua flex items-center justify-center text-brand-skyblue font-bold border border-brand-skyblue">
                                         {user?.full_name?.charAt(0) || <User size={16} />}
                                     </div>
-                                    <span>{user?.full_name?.split(' ')[0] || 'User'}</span>
+                                    <span>{user?.role === 'admin' ? 'Admin' : (user?.full_name?.split(' ')[0] || 'User')}</span>
                                 </Link>
                                 <button
                                     onClick={handleLogout}

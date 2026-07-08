@@ -37,7 +37,9 @@ const Blog = () => {
 
     const truncate = (text: string, length: number) => {
         if (!text) return '';
-        return text.length > length ? text.substring(0, length) + '...' : text;
+        // Strip basic markdown syntax for the preview
+        const plainText = text.replace(/[#*`_>\[\]]/g, '').trim();
+        return plainText.length > length ? plainText.substring(0, length) + '...' : plainText;
     };
 
     return (

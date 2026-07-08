@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Calendar, User, ArrowLeft, Loader2, Tag } from 'lucide-react';
 import api from '../services/api';
 import { BlogPost } from './Blog';
+import ReactMarkdown from 'react-markdown';
 
 const BlogDetail = () => {
     const { id } = useParams<{ id: string }>();
@@ -98,13 +99,7 @@ const BlogDetail = () => {
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
                 <div className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100">
                     <div className="prose prose-lg max-w-none text-gray-700 font-inter">
-                        {blog.content.split('\n').map((paragraph, index) => (
-                            paragraph.trim() !== '' ? (
-                                <p key={index} className="mb-6 leading-relaxed text-[1.1rem]">
-                                    {paragraph}
-                                </p>
-                            ) : null
-                        ))}
+                        <ReactMarkdown>{blog.content}</ReactMarkdown>
                     </div>
                     
                     {/* Footer Tags */}

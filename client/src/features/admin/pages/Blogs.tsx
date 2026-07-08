@@ -74,14 +74,15 @@ const AdminBlogs = () => {
                 title: generatedBlog.title || '',
                 content: generatedBlog.content || '',
                 author: 'Dream Voyager Admin',
-                image_url: '', // Leave empty for manual addition
+                image_url: generatedBlog.image_url || '', 
                 tags: generatedBlog.tags ? generatedBlog.tags.join(', ') : '',
                 published: false // Default to false for review
             });
             setIsModalOpen(true);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error generating AI blog:', error);
-            alert('Failed to generate blog post with AI.');
+            const errorMsg = error.response?.data?.error || 'Failed to generate blog post with AI.';
+            alert(errorMsg);
         } finally {
             setIsAIGenerating(false);
         }
