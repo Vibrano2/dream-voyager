@@ -6,6 +6,7 @@ import ScrollToTop from './components/common/ScrollToTop';
 import { AuthProvider } from './features/auth/context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 // Pages
 import Home from './pages/Home';
@@ -94,6 +95,7 @@ function App() {
         </Router>
       </LanguageProvider>
       <Analytics />
+      <SpeedInsights />
     </AuthProvider>
   );
 }
