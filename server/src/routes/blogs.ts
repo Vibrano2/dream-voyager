@@ -4,7 +4,8 @@ import {
     getBlogById,
     createBlog,
     updateBlog,
-    deleteBlog
+    deleteBlog,
+    generateAIBlog
 } from '../controllers/blogController.js';
 import { requireAuth, requireRole } from '../middleware/auth.js';
 
@@ -15,6 +16,7 @@ router.get('/', getBlogs);
 router.get('/:id', getBlogById);
 
 // Admin routes
+router.post('/generate', requireAuth, requireRole(['admin']), generateAIBlog);
 router.post('/', requireAuth, requireRole(['admin']), createBlog);
 router.put('/:id', requireAuth, requireRole(['admin']), updateBlog);
 router.delete('/:id', requireAuth, requireRole(['admin']), deleteBlog);

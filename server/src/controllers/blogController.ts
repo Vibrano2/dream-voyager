@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { createClient } from '@supabase/supabase-js';
 import supabase from '../config/supabase.js';
+import OpenAI from 'openai';
 
 // @desc    Get all published blogs (public) or all blogs (admin)
 export const getBlogs = async (req: Request, res: Response) => {
@@ -150,5 +151,60 @@ export const deleteBlog = async (req: Request, res: Response) => {
     } catch (error: any) {
         console.error('Delete blog error:', error);
         res.status(500).json({ error: error.message });
+    }
+};
+
+// @desc    Generate a blog post using AI (admin only)
+export const generateAIBlog = async (req: Request, res: Response) => {
+    try {
+        const { topic } = req.body;
+
+        if (!topic) {
+            return res.status(400).json({ error: 'Topic is required' });
+        }
+
+        const apiKey = process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_KEY || '';
+
+        if (!apiKey) {
+            return res.status(500).json({ error: 'OpenAI API Key not configured' });
+        }
+
+        const openai = new OpenAI({ apiKey });
+
+        const prompt = `
+You are an expert travel blogger for Dream Voyager, a luxury travel agency.
+Generate a comprehensive, engaging, and SEO-friendly travel blog post about the following topic: "${topic}"
+
+Your response MUST be a valid JSON object with the following structure:
+{
+    "title": "A catchy, SEO-friendly title for the blog post",
+    "content": "The full blog post content formatted beautifully in Markdown. Include headings, lists, and engaging paragraphs. Must be detailed and well-written.",
+    "tags": ["travel", "luxury", "relevant-tag-1", "relevant-tag-2"],
+    "imageKeyword": "A short search term (1-3 words) that would find a good cover image for this post on Unsplash (e.g., 'paris eiffel tower')"
+}
+
+Ensure the response is strict JSON. Do not include markdown code block wrappers (like \`\`\`json) around the response.
+`;
+
+        const completion = await openai.chat.completions.create({
+            messages: [{ role: "system", content: prompt }],
+            model: "gpt-3.5-turbo",
+            temperature: 0.7,
+            response_format: { type: "json_object" }
+        });
+
+        const text = completion.choices[0].message.content;
+        
+        if (!text) {
+            throw new Error('Failed to generate content');
+        }
+
+        const generatedData = JSON.parse(text);
+
+        res.status(200).json({ blog: generatedData });
+
+    } catch (error: any) {
+        console.error('AI Blog Generation error:', error);
+        res.status(500).json({ error: 'Failed to generate blog post' });
     }
 };

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, CheckCircle, XCircle, Search, Loader2 } from 'lucide-react';
+import { Plus, Edit2, Trash2, CheckCircle, XCircle, Search, Loader2, Sparkles } from 'lucide-react';
 import api from '../../../services/api';
 import { BlogPost } from '../../../pages/Blog';
 
@@ -18,6 +18,7 @@ const AdminBlogs = () => {
         published: true
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isAIGenerating, setIsAIGenerating] = useState(false);
 
     useEffect(() => {
         fetchBlogs();
@@ -57,6 +58,33 @@ const AdminBlogs = () => {
             });
         }
         setIsModalOpen(true);
+    };
+
+    const handleGenerateAI = async () => {
+        const topic = window.prompt("What should the blog post be about? (e.g., 'Top 5 beaches in Maldives')");
+        if (!topic) return;
+
+        setIsAIGenerating(true);
+        try {
+            const response = await api.post('/blogs/generate', { topic });
+            const generatedBlog = response.data.blog;
+            
+            setEditingBlog(null);
+            setFormData({
+                title: generatedBlog.title || '',
+                content: generatedBlog.content || '',
+                author: 'Dream Voyager Admin',
+                image_url: '', // Leave empty for manual addition
+                tags: generatedBlog.tags ? generatedBlog.tags.join(', ') : '',
+                published: false // Default to false for review
+            });
+            setIsModalOpen(true);
+        } catch (error) {
+            console.error('Error generating AI blog:', error);
+            alert('Failed to generate blog post with AI.');
+        } finally {
+            setIsAIGenerating(false);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -102,13 +130,23 @@ const AdminBlogs = () => {
         <div className="p-6">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold text-slate-800">Blog Posts</h1>
-                <button
-                    onClick={() => handleOpenModal()}
-                    className="flex items-center gap-2 bg-[#F49129] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors"
-                >
-                    <Plus size={20} />
-                    Create Post
-                </button>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={handleGenerateAI}
+                        disabled={isAIGenerating}
+                        className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50"
+                    >
+                        {isAIGenerating ? <Loader2 size={20} className="animate-spin" /> : <Sparkles size={20} />}
+                        {isAIGenerating ? 'Generating...' : 'Generate with AI'}
+                    </button>
+                    <button
+                        onClick={() => handleOpenModal()}
+                        className="flex items-center gap-2 bg-[#F49129] text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors"
+                    >
+                        <Plus size={20} />
+                        Create Post
+                    </button>
+                </div>
             </div>
 
             <div className="bg-white rounded-xl shadow-sm border border-slate-200">
