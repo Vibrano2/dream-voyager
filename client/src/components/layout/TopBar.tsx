@@ -126,7 +126,8 @@ const TopBar = () => {
                             { label: t('nav.packages'), path: '/packages' },
                             { label: t('nav.about'), path: '/about' },
                             { label: 'Corporate', path: '/corporate' },
-                            { label: 'Services', path: '/services' }
+                            { label: 'Services', path: '/services' },
+                            { label: 'Blog', path: '/blog' }
                         ].map((item) => (
                             <Link
                                 key={item.label}
@@ -191,7 +192,8 @@ const TopBar = () => {
                         { label: t('nav.packages'), path: '/packages' },
                         { label: t('nav.about'), path: '/about' },
                         { label: 'Corporate', path: '/corporate' },
-                        { label: 'Services', path: '/services' }
+                        { label: 'Services', path: '/services' },
+                        { label: 'Blog', path: '/blog' }
                     ].map((item) => (
                         <Link
                             key={item.label}

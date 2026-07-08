@@ -12,6 +12,7 @@ import authRouter from './routes/auth.js';
 import chatRouter from './routes/chat.js';
 import { deliveriesRouter } from './routes/deliveries.js';
 import { adminRouter } from './routes/admin.js';
+import blogsRouter from './routes/blogs.js';
 import { requireAuth, requireRole } from './middleware/auth.js';
 
 import path from 'path';
@@ -69,6 +70,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/deliveries', deliveriesRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/blogs', blogsRouter);
 
 app.get('/', (req: Request, res: Response) => {
     res.json({ message: 'Dream Voyager API is secure and running' });

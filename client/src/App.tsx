@@ -17,6 +17,8 @@ import Destinations from './pages/Destinations';
 import Packages from './pages/Packages';
 import Services from './pages/Services';
 import About from './pages/About';
+import Blog from './pages/Blog';
+import BlogDetail from './pages/BlogDetail';
 import Flights from './pages/Flights';
 import Hotels from './pages/Hotels';
 import Visa from './pages/Visa';
@@ -34,6 +36,7 @@ import AdminDashboard from './features/admin/pages/Dashboard';
 import AdminBookings from './features/admin/pages/Bookings';
 import AdminPackages from './features/admin/pages/Packages';
 import AdminUsers from './features/admin/pages/Users';
+import AdminBlogs from './features/admin/pages/Blogs';
 import AdminSettings from './features/admin/pages/Settings';
 import Support from './pages/Support';
 import Insurance from './pages/Insurance';
@@ -67,6 +70,7 @@ function App() {
                   <Route path="bookings" element={<AdminBookings />} />
                   <Route path="packages" element={<AdminPackages />} />
                   <Route path="users" element={<AdminUsers />} />
+                  <Route path="blogs" element={<AdminBlogs />} />
                   <Route path="settings" element={<AdminSettings />} />
                 </Route>
 
@@ -81,6 +85,8 @@ function App() {
                 <Route path="/corporate" element={<Corporate />} />
 
                 <Route path="/about" element={<About />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:id" element={<BlogDetail />} />
                 <Route path="/book" element={<Book />} />
                 <Route path="/support" element={<Support />} />
                 <Route path="/insurance" element={<Insurance />} />

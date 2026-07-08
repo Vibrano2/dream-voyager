@@ -1,5 +1,5 @@
 import { Outlet, Link, useNavigate, useLocation, Navigate } from 'react-router-dom';
-import { LayoutDashboard, Package, Users, CalendarDays, LogOut, Settings } from 'lucide-react';
+import { LayoutDashboard, Package, Users, CalendarDays, LogOut, Settings, FileText } from 'lucide-react';
 import { useAuth } from '../../auth/context/AuthContext';
 
 const AdminLayout = () => {
@@ -39,6 +39,7 @@ const AdminLayout = () => {
         { icon: CalendarDays, label: 'Bookings', path: '/admin/bookings' },
         { icon: Package, label: 'Packages', path: '/admin/packages' },
         { icon: Users, label: 'Users', path: '/admin/users' },
+        { icon: FileText, label: 'Blogs', path: '/admin/blogs' },
         { icon: Settings, label: 'Settings', path: '/admin/settings' },
     ];
 
