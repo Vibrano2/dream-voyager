@@ -21,7 +21,7 @@ const Support = () => {
                             <div>
                                 <h3 className="font-bold text-gray-800">Phone</h3>
                                 <p className="text-gray-600 mb-1">Mon-Fri from 8am to 5pm</p>
-                                <a href="tel:+2348001234567" className="text-brand-orange font-medium hover:underline">+234 800 DREAM VOY</a>
+                                <a href="tel:+2349011283505" className="text-brand-orange font-medium hover:underline">+234 901 128 3505</a>
                             </div>
                         </div>
 

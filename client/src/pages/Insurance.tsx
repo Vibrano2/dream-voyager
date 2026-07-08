@@ -98,8 +98,8 @@ const Insurance = () => {
                             <p className="text-indigo-700 text-sm mb-4">
                                 Our support team is available 24/7 to help with claims and emergencies.
                             </p>
-                            <a href="tel:+2348001234567" className="text-indigo-600 font-bold hover:underline">
-                                Call +234 800 DREAM VOY
+                            <a href="tel:+2349011283505" className="text-indigo-600 font-bold hover:underline">
+                                Call +234 901 128 3505
                             </a>
                         </div>
                     </div>
