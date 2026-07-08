@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import TopBar from './components/layout/TopBar';
 import Footer from './components/layout/Footer';
 import ChatWidget from './components/common/ChatWidget';
@@ -90,6 +91,7 @@ function App() {
             <Footer />
             <ChatWidget />
           </div>
+          <Analytics />
         </Router>
       </LanguageProvider>
     </AuthProvider>
