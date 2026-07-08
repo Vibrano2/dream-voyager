@@ -62,7 +62,7 @@ export const sendBookingConfirmation = async (email: string, bookingDetails: Boo
                         </div>
                         <div class="footer">
                             <p>© 2024 Dream Voyager. All rights reserved.</p>
-                            <p>Contact: info@dreamvoyagerg.com | +234 901 128 3505</p>
+                            <p>Contact: info@dreamvoyagerg.com | +2349011DREAM VOY</p>
                         </div>
                     </div>
                 </body>

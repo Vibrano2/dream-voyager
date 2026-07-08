@@ -21,7 +21,7 @@ const Support = () => {
                             <div>
                                 <h3 className="font-bold text-gray-800">Phone</h3>
                                 <p className="text-gray-600 mb-1">Mon-Fri from 8am to 5pm</p>
-                                <a href="tel:+2349011283505" className="text-brand-orange font-medium hover:underline">+234 901 128 3505</a>
+                                <a href="tel:+2349011283505" className="text-brand-orange font-medium hover:underline">+2349011DREAM VOY</a>
                             </div>
                         </div>
 
@@ -43,7 +43,7 @@ const Support = () => {
                             <div>
                                 <h3 className="font-bold text-gray-800">Office</h3>
                                 <p className="text-gray-600 mb-1">Come say hello at our office HQ.</p>
-                                <p className="text-gray-800 font-medium">123 Travel Street, Lagos, Nigeria</p>
+                                <p className="text-gray-800 font-medium">Osota Masque, Ikorodu Lagos</p>
                             </div>
                         </div>
                     </div>

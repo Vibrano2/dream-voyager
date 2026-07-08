@@ -110,13 +110,13 @@ const Footer = () => {
                             <li className="flex items-start gap-3">
                                 <MapPin size={18} className="text-brand-skyblue mt-0.5 flex-shrink-0" />
                                 <span className="text-gray-300 text-sm">
-                                    123 Travel Street, Lagos, Nigeria
+                                    Osota Masque, Ikorodu Lagos
                                 </span>
                             </li>
                             <li className="flex items-center gap-3">
                                 <Phone size={18} className="text-brand-skyblue flex-shrink-0" />
                                 <a href="tel:+2349011283505" className="text-gray-300 hover:text-brand-skyblue transition-colors text-sm">
-                                    +234 901 128 3505
+                                    +2349011DREAM VOY
                                 </a>
                             </li>
                             <li className="flex items-center gap-3">

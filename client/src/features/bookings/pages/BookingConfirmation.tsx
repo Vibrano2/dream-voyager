@@ -57,7 +57,7 @@ const BookingConfirmation = () => {
 
                     <div className="mt-6 p-4 bg-blue-50 rounded-lg">
                         <p className="text-sm text-blue-800">
-                            <strong>Need Help?</strong> Contact our support team at info@dreamvoyagerg.com or call +234 901 128 3505
+                            <strong>Need Help?</strong> Contact our support team at info@dreamvoyagerg.com or call +2349011DREAM VOY
                         </p>
                     </div>
                 </div>

@@ -42,7 +42,7 @@ const TopBar = () => {
                 <div className="container mx-auto px-4 flex justify-between items-center">
                     <div className="flex items-center space-x-6">
                         <span className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
-                            <Phone size={14} /> +234 901 128 3505
+                            <Phone size={14} /> +2349011DREAM VOY
                         </span>
                         <span className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
                             <Mail size={14} /> info@dreamvoyagerg.com

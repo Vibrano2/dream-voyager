@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Shield, CheckCircle2, AlertCircle, ArrowRight, Phone, Mail, FileText, Umbrella } from 'lucide-react';
+import { Shield, CheckCircle2, AlertCircle, ArrowRight, Phone, FileText, Umbrella } from 'lucide-react';
 
 const Insurance = () => {
     const [formData, setFormData] = useState({
@@ -99,7 +99,7 @@ const Insurance = () => {
                                 Our support team is available 24/7 to help with claims and emergencies.
                             </p>
                             <a href="tel:+2349011283505" className="text-indigo-600 font-bold hover:underline">
-                                Call +234 901 128 3505
+                                Call +2349011DREAM VOY
                             </a>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Heart, MapPin, Calendar, ArrowRight, Search, Star, Sparkles, Wine, Palmtree } from 'lucide-react';
 
 interface HoneymoonPackage {
