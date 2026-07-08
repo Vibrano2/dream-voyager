@@ -45,7 +45,7 @@ const TopBar = () => {
                             <Phone size={14} /> +234 800 DREAM VOY
                         </span>
                         <span className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer">
-                            <Mail size={14} /> hello@dreamvoyager.com
+                            <Mail size={14} /> info@dreamvoyagerg.com
                         </span>
                     </div>
 

@@ -16,7 +16,7 @@ const Privacy = () => {
                 <p>We use your information to facilitate your travel bookings, communicate with you, and improve our services.</p>
 
                 <h2 className="text-xl font-bold mt-6 mb-3">3. Contact Us</h2>
-                <p>If you have any questions about this Privacy Policy, please contact us at hello@dreamvoyager.com.</p>
+                <p>If you have any questions about this Privacy Policy, please contact us at info@dreamvoyagerg.com.</p>
             </div>
         </div>
     );
