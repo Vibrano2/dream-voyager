@@ -5,6 +5,7 @@ import ChatWidget from './components/common/ChatWidget';
 import ScrollToTop from './components/common/ScrollToTop';
 import { AuthProvider } from './features/auth/context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
+import { Analytics } from '@vercel/analytics/react';
 
 // Pages
 import Home from './pages/Home';
@@ -92,6 +93,7 @@ function App() {
           </div>
         </Router>
       </LanguageProvider>
+      <Analytics />
     </AuthProvider>
   );
 }
